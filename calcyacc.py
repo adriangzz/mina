@@ -11,7 +11,7 @@ def p_expression_program(p):
 
 def p_expression_program_vars(p):
     '''
-    program : PROGRAM_ID ID SEMICOLON vars block
+    program : PROGRAM_ID ID SEMICOLON vars functions block
     '''
 
 
@@ -49,6 +49,19 @@ def p_vars(p):
               | empty
     '''
 
+def p_functions(p):
+    '''
+    functions : FUNCTION_ID type ID OPEN_PARENTHESIS parameters CLOSE_PARENTHESIS block
+              | empty
+    '''
+
+def p_parameters(p):
+    '''
+    parameters : type ID parameters2 
+               | empty
+    parameters2 : COMMA type ID parameters2
+                | empty 
+    '''
 
 def p_assign(p):
     '''

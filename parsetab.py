@@ -6,9 +6,9 @@ _tabversion = '3.10'
 
 _lr_method = 'LALR'
 
-_lr_signature = 'CLOSE_BRACKET CLOSE_PARENTHESIS COLON COMMA DIVIDE ELSE EQUAL FLOAT FLOAT_ID GREATER_THAN GREATER_THAN_EQUAL ID IF INT INT_ID LESS_THAN LESS_THAN_EQUAL MINUS MULTIPLY NOT_EQUAL OPEN_BRACKET OPEN_PARENTHESIS PLUS PRINT PROGRAM_ID SEMICOLON STRING VAR_ID WORD\n    program : PROGRAM_ID ID SEMICOLON block\n    \n    program : PROGRAM_ID ID SEMICOLON vars block\n    \n    block : OPEN_BRACKET block_statue CLOSE_BRACKET\n    \n    block_statue : statue block_statue\n                 | empty\n    \n    statue : assign\n           | condition\n           | write\n    \n    vars : VAR_ID varstype vars2\n    vars2 : varstype vars2\n          | empty\n    varstype : ID varstype2 COLON type SEMICOLON\n    varstype2 : COMMA ID varstype2\n              | empty\n    \n    assign : ID EQUAL expression SEMICOLON\n    \n    exp : term plus_minus\n    \n    term : factor multiply_divide\n    \n    factor : OPEN_PARENTHESIS expression CLOSE_PARENTHESIS\n           | plus_minus_factor var_cte\n    \n    var_cte : ID \n            | INT \n            | FLOAT\n    \n    plus_minus_factor : PLUS \n                      | MINUS \n                      | empty\n    \n    multiply_divide : MULTIPLY term \n                    | DIVIDE term \n                    | empty\n    \n    plus_minus : PLUS exp \n               | MINUS exp \n               | empty\n    \n    condition : IF OPEN_PARENTHESIS expression CLOSE_PARENTHESIS block else SEMICOLON\n    \n    else : ELSE block \n         | empty\n    \n    expression : exp expression_def\n    expression_def : GREATER_THAN exp \n               | LESS_THAN exp \n               | NOT_EQUAL exp \n               | empty\n    \n    write : PRINT OPEN_PARENTHESIS write_exp CLOSE_PARENTHESIS SEMICOLON\n    \n    write_exp : expression\n              | expression COMMA write_exp\n              | STRING\n              | STRING COMMA write_exp\n    \n    type : INT_ID\n         | FLOAT_ID\n    empty :'
+_lr_signature = 'CLOSE_BRACKET CLOSE_PARENTHESIS COLON COMMA DIVIDE ELSE EQUAL FLOAT FLOAT_ID FUNCTION_ID GREATER_THAN GREATER_THAN_EQUAL ID IF INT INT_ID LESS_THAN LESS_THAN_EQUAL MINUS MULTIPLY NOT_EQUAL OPEN_BRACKET OPEN_PARENTHESIS PLUS PRINT PROGRAM_ID SEMICOLON STRING VAR_ID WORD\n    program : PROGRAM_ID ID SEMICOLON block\n    \n    program : PROGRAM_ID ID SEMICOLON vars functions block\n    \n    block : OPEN_BRACKET block_statue CLOSE_BRACKET\n    \n    block_statue : statue block_statue\n                 | empty\n    \n    statue : assign\n           | condition\n           | write\n    \n    vars : VAR_ID varstype vars2\n    vars2 : varstype vars2\n          | empty\n    varstype : ID varstype2 COLON type SEMICOLON\n    varstype2 : COMMA ID varstype2\n              | empty\n    \n    functions : FUNCTION_ID type ID OPEN_PARENTHESIS parameters CLOSE_PARENTHESIS block\n              | empty\n    \n    parameters : type ID parameters2 \n               | empty\n    parameters2 : COMMA type ID parameters2\n                | empty \n    \n    assign : ID EQUAL expression SEMICOLON\n    \n    exp : term plus_minus\n    \n    term : factor multiply_divide\n    \n    factor : OPEN_PARENTHESIS expression CLOSE_PARENTHESIS\n           | plus_minus_factor var_cte\n    \n    var_cte : ID \n            | INT \n            | FLOAT\n    \n    plus_minus_factor : PLUS \n                      | MINUS \n                      | empty\n    \n    multiply_divide : MULTIPLY term \n                    | DIVIDE term \n                    | empty\n    \n    plus_minus : PLUS exp \n               | MINUS exp \n               | empty\n    \n    condition : IF OPEN_PARENTHESIS expression CLOSE_PARENTHESIS block else SEMICOLON\n    \n    else : ELSE block \n         | empty\n    \n    expression : exp expression_def\n    expression_def : GREATER_THAN exp \n               | LESS_THAN exp \n               | NOT_EQUAL exp \n               | empty\n    \n    write : PRINT OPEN_PARENTHESIS write_exp CLOSE_PARENTHESIS SEMICOLON\n    \n    write_exp : expression\n              | expression COMMA write_exp\n              | STRING\n              | STRING COMMA write_exp\n    \n    type : INT_ID\n         | FLOAT_ID\n    empty :'
     
-_lr_action_items = {'PROGRAM_ID':([0,],[2,]),'$end':([1,5,9,21,],[0,-1,-2,-3,]),'ID':([2,7,8,11,13,14,15,19,23,24,25,26,30,36,37,38,39,40,48,50,51,52,55,56,59,60,69,70,84,87,91,],[3,16,20,16,-6,-7,-8,20,-47,-47,-47,20,47,-47,64,-23,-24,-25,-15,-47,-47,-47,-47,-47,-47,-47,-47,-47,-40,-12,-32,]),'SEMICOLON':([3,21,32,33,34,35,49,53,54,57,58,61,63,64,65,66,68,71,72,73,75,76,77,78,79,80,81,82,83,88,90,92,],[4,-3,48,-47,-47,-47,-35,-39,-16,-31,-17,-28,-19,-20,-21,-22,84,87,-45,-46,-36,-37,-38,-29,-30,-26,-27,-18,-47,91,-34,-33,]),'OPEN_BRACKET':([4,6,19,26,27,28,45,67,87,89,],[7,7,-47,-47,-9,-11,-10,7,-12,7,]),'VAR_ID':([4,],[8,]),'CLOSE_BRACKET':([7,10,11,12,13,14,15,22,48,84,91,],[-47,21,-47,-5,-6,-7,-8,-4,-15,-40,-32,]),'IF':([7,11,13,14,15,48,84,91,],[17,17,-6,-7,-8,-15,-40,-32,]),'PRINT':([7,11,13,14,15,48,84,91,],[18,18,-6,-7,-8,-15,-40,-32,]),'EQUAL':([16,],[23,]),'OPEN_PARENTHESIS':([17,18,23,24,25,36,50,51,52,55,56,59,60,69,70,],[24,25,36,36,36,36,36,36,36,36,36,36,36,36,36,]),'COMMA':([20,33,34,35,43,44,47,49,53,54,57,58,61,63,64,65,66,75,76,77,78,79,80,81,82,],[30,-47,-47,-47,69,70,30,-35,-39,-16,-31,-17,-28,-19,-20,-21,-22,-36,-37,-38,-29,-30,-26,-27,-18,]),'COLON':([20,29,31,47,74,],[-47,46,-14,-47,-13,]),'ELSE':([21,83,],[-3,89,]),'PLUS':([23,24,25,34,35,36,50,51,52,55,56,58,59,60,61,63,64,65,66,69,70,80,81,82,],[38,38,38,55,-47,38,38,38,38,38,38,-17,38,38,-28,-19,-20,-21,-22,38,38,-26,-27,-18,]),'MINUS':([23,24,25,34,35,36,50,51,52,55,56,58,59,60,61,63,64,65,66,69,70,80,81,82,],[39,39,39,56,-47,39,39,39,39,39,39,-17,39,39,-28,-19,-20,-21,-22,39,39,-26,-27,-18,]),'INT':([23,24,25,36,37,38,39,40,50,51,52,55,56,59,60,69,70,],[-47,-47,-47,-47,65,-23,-24,-25,-47,-47,-47,-47,-47,-47,-47,-47,-47,]),'FLOAT':([23,24,25,36,37,38,39,40,50,51,52,55,56,59,60,69,70,],[-47,-47,-47,-47,66,-23,-24,-25,-47,-47,-47,-47,-47,-47,-47,-47,-47,]),'STRING':([25,69,70,],[44,44,44,]),'GREATER_THAN':([33,34,35,54,57,58,61,63,64,65,66,78,79,80,81,82,],[50,-47,-47,-16,-31,-17,-28,-19,-20,-21,-22,-29,-30,-26,-27,-18,]),'LESS_THAN':([33,34,35,54,57,58,61,63,64,65,66,78,79,80,81,82,],[51,-47,-47,-16,-31,-17,-28,-19,-20,-21,-22,-29,-30,-26,-27,-18,]),'NOT_EQUAL':([33,34,35,54,57,58,61,63,64,65,66,78,79,80,81,82,],[52,-47,-47,-16,-31,-17,-28,-19,-20,-21,-22,-29,-30,-26,-27,-18,]),'CLOSE_PARENTHESIS':([33,34,35,41,42,43,44,49,53,54,57,58,61,62,63,64,65,66,75,76,77,78,79,80,81,82,85,86,],[-47,-47,-47,67,68,-41,-43,-35,-39,-16,-31,-17,-28,82,-19,-20,-21,-22,-36,-37,-38,-29,-30,-26,-27,-18,-42,-44,]),'MULTIPLY':([35,63,64,65,66,82,],[59,-19,-20,-21,-22,-18,]),'DIVIDE':([35,63,64,65,66,82,],[60,-19,-20,-21,-22,-18,]),'INT_ID':([46,],[72,]),'FLOAT_ID':([46,],[73,]),}
+_lr_action_items = {'PROGRAM_ID':([0,],[2,]),'$end':([1,5,23,27,],[0,-1,-2,-3,]),'ID':([2,7,8,13,15,16,17,21,24,25,26,29,30,31,32,36,43,44,45,46,47,56,58,59,60,63,64,67,68,77,78,81,93,96,106,108,],[3,18,22,18,-6,-7,-8,22,38,-51,-52,-53,-53,-53,22,54,-53,72,-29,-30,-31,-21,-53,-53,-53,-53,-53,-53,-53,-53,-53,97,-46,-12,-38,109,]),'SEMICOLON':([3,25,26,27,39,40,41,42,57,61,62,65,66,69,71,72,73,74,76,79,84,85,86,87,88,89,90,91,92,99,101,107,],[4,-51,-52,-3,56,-53,-53,-53,-41,-45,-22,-37,-23,-34,-25,-26,-27,-28,93,96,-42,-43,-44,-35,-36,-32,-33,-24,-53,106,-40,-39,]),'OPEN_BRACKET':([4,6,9,11,21,27,32,33,34,52,75,96,98,100,105,],[7,-53,7,-16,-53,-3,-53,-9,-11,-10,7,-12,7,7,-15,]),'VAR_ID':([4,],[8,]),'FUNCTION_ID':([6,21,32,33,34,52,96,],[10,-53,-53,-9,-11,-10,-12,]),'CLOSE_BRACKET':([7,12,13,14,15,16,17,28,56,93,106,],[-53,27,-53,-5,-6,-7,-8,-4,-21,-46,-38,]),'IF':([7,13,15,16,17,56,93,106,],[19,19,-6,-7,-8,-21,-46,-38,]),'PRINT':([7,13,15,16,17,56,93,106,],[20,20,-6,-7,-8,-21,-46,-38,]),'INT_ID':([10,53,55,103,],[25,25,25,25,]),'FLOAT_ID':([10,53,55,103,],[26,26,26,26,]),'EQUAL':([18,],[29,]),'OPEN_PARENTHESIS':([19,20,29,30,31,38,43,58,59,60,63,64,67,68,77,78,],[30,31,43,43,43,55,43,43,43,43,43,43,43,43,43,43,]),'COMMA':([22,40,41,42,50,51,54,57,61,62,65,66,69,71,72,73,74,84,85,86,87,88,89,90,91,97,109,],[36,-53,-53,-53,77,78,36,-41,-45,-22,-37,-23,-34,-25,-26,-27,-28,-42,-43,-44,-35,-36,-32,-33,-24,103,103,]),'COLON':([22,35,37,54,80,],[-53,53,-14,-53,-13,]),'ELSE':([27,92,],[-3,100,]),'PLUS':([29,30,31,41,42,43,58,59,60,63,64,66,67,68,69,71,72,73,74,77,78,89,90,91,],[45,45,45,63,-53,45,45,45,45,45,45,-23,45,45,-34,-25,-26,-27,-28,45,45,-32,-33,-24,]),'MINUS':([29,30,31,41,42,43,58,59,60,63,64,66,67,68,69,71,72,73,74,77,78,89,90,91,],[46,46,46,64,-53,46,46,46,46,46,46,-23,46,46,-34,-25,-26,-27,-28,46,46,-32,-33,-24,]),'INT':([29,30,31,43,44,45,46,47,58,59,60,63,64,67,68,77,78,],[-53,-53,-53,-53,73,-29,-30,-31,-53,-53,-53,-53,-53,-53,-53,-53,-53,]),'FLOAT':([29,30,31,43,44,45,46,47,58,59,60,63,64,67,68,77,78,],[-53,-53,-53,-53,74,-29,-30,-31,-53,-53,-53,-53,-53,-53,-53,-53,-53,]),'STRING':([31,77,78,],[51,51,51,]),'GREATER_THAN':([40,41,42,62,65,66,69,71,72,73,74,87,88,89,90,91,],[58,-53,-53,-22,-37,-23,-34,-25,-26,-27,-28,-35,-36,-32,-33,-24,]),'LESS_THAN':([40,41,42,62,65,66,69,71,72,73,74,87,88,89,90,91,],[59,-53,-53,-22,-37,-23,-34,-25,-26,-27,-28,-35,-36,-32,-33,-24,]),'NOT_EQUAL':([40,41,42,62,65,66,69,71,72,73,74,87,88,89,90,91,],[60,-53,-53,-22,-37,-23,-34,-25,-26,-27,-28,-35,-36,-32,-33,-24,]),'CLOSE_PARENTHESIS':([40,41,42,48,49,50,51,55,57,61,62,65,66,69,70,71,72,73,74,82,83,84,85,86,87,88,89,90,91,94,95,97,102,104,109,110,],[-53,-53,-53,75,76,-47,-49,-53,-41,-45,-22,-37,-23,-34,91,-25,-26,-27,-28,98,-18,-42,-43,-44,-35,-36,-32,-33,-24,-48,-50,-53,-17,-20,-53,-19,]),'MULTIPLY':([42,71,72,73,74,91,],[67,-25,-26,-27,-28,-24,]),'DIVIDE':([42,71,72,73,74,91,],[68,-25,-26,-27,-28,-24,]),}
 
 _lr_action = {}
 for _k, _v in _lr_action_items.items():
@@ -17,7 +17,7 @@ for _k, _v in _lr_action_items.items():
       _lr_action[_x][_k] = _y
 del _lr_action_items
 
-_lr_goto_items = {'program':([0,],[1,]),'block':([4,6,67,89,],[5,9,83,92,]),'vars':([4,],[6,]),'block_statue':([7,11,],[10,22,]),'statue':([7,11,],[11,11,]),'empty':([7,11,19,20,23,24,25,26,33,34,35,36,47,50,51,52,55,56,59,60,69,70,83,],[12,12,28,31,40,40,40,28,53,57,61,40,31,40,40,40,40,40,40,40,40,40,90,]),'assign':([7,11,],[13,13,]),'condition':([7,11,],[14,14,]),'write':([7,11,],[15,15,]),'varstype':([8,19,26,],[19,26,26,]),'vars2':([19,26,],[27,45,]),'varstype2':([20,47,],[29,74,]),'expression':([23,24,25,36,69,70,],[32,41,43,62,43,43,]),'exp':([23,24,25,36,50,51,52,55,56,69,70,],[33,33,33,33,75,76,77,78,79,33,33,]),'term':([23,24,25,36,50,51,52,55,56,59,60,69,70,],[34,34,34,34,34,34,34,34,34,80,81,34,34,]),'factor':([23,24,25,36,50,51,52,55,56,59,60,69,70,],[35,35,35,35,35,35,35,35,35,35,35,35,35,]),'plus_minus_factor':([23,24,25,36,50,51,52,55,56,59,60,69,70,],[37,37,37,37,37,37,37,37,37,37,37,37,37,]),'write_exp':([25,69,70,],[42,85,86,]),'expression_def':([33,],[49,]),'plus_minus':([34,],[54,]),'multiply_divide':([35,],[58,]),'var_cte':([37,],[63,]),'type':([46,],[71,]),'else':([83,],[88,]),}
+_lr_goto_items = {'program':([0,],[1,]),'block':([4,9,75,98,100,],[5,23,92,105,107,]),'vars':([4,],[6,]),'functions':([6,],[9,]),'empty':([6,7,13,21,22,29,30,31,32,40,41,42,43,54,55,58,59,60,63,64,67,68,77,78,92,97,109,],[11,14,14,34,37,47,47,47,34,61,65,69,47,37,83,47,47,47,47,47,47,47,47,47,101,104,104,]),'block_statue':([7,13,],[12,28,]),'statue':([7,13,],[13,13,]),'assign':([7,13,],[15,15,]),'condition':([7,13,],[16,16,]),'write':([7,13,],[17,17,]),'varstype':([8,21,32,],[21,32,32,]),'type':([10,53,55,103,],[24,79,81,108,]),'vars2':([21,32,],[33,52,]),'varstype2':([22,54,],[35,80,]),'expression':([29,30,31,43,77,78,],[39,48,50,70,50,50,]),'exp':([29,30,31,43,58,59,60,63,64,77,78,],[40,40,40,40,84,85,86,87,88,40,40,]),'term':([29,30,31,43,58,59,60,63,64,67,68,77,78,],[41,41,41,41,41,41,41,41,41,89,90,41,41,]),'factor':([29,30,31,43,58,59,60,63,64,67,68,77,78,],[42,42,42,42,42,42,42,42,42,42,42,42,42,]),'plus_minus_factor':([29,30,31,43,58,59,60,63,64,67,68,77,78,],[44,44,44,44,44,44,44,44,44,44,44,44,44,]),'write_exp':([31,77,78,],[49,94,95,]),'expression_def':([40,],[57,]),'plus_minus':([41,],[62,]),'multiply_divide':([42,],[66,]),'var_cte':([44,],[71,]),'parameters':([55,],[82,]),'else':([92,],[99,]),'parameters2':([97,109,],[102,110,]),}
 
 _lr_goto = {}
 for _k, _v in _lr_goto_items.items():
@@ -27,51 +27,57 @@ for _k, _v in _lr_goto_items.items():
 del _lr_goto_items
 _lr_productions = [
   ("S' -> program","S'",1,None,None,None),
-  ('program -> PROGRAM_ID ID SEMICOLON block','program',4,'p_expression_program','calcyacc.py',8),
-  ('program -> PROGRAM_ID ID SEMICOLON vars block','program',5,'p_expression_program_vars','calcyacc.py',15),
-  ('block -> OPEN_BRACKET block_statue CLOSE_BRACKET','block',3,'p_block','calcyacc.py',21),
-  ('block_statue -> statue block_statue','block_statue',2,'p_block_statue','calcyacc.py',28),
-  ('block_statue -> empty','block_statue',1,'p_block_statue','calcyacc.py',29),
-  ('statue -> assign','statue',1,'p_statue','calcyacc.py',36),
-  ('statue -> condition','statue',1,'p_statue','calcyacc.py',37),
-  ('statue -> write','statue',1,'p_statue','calcyacc.py',38),
-  ('vars -> VAR_ID varstype vars2','vars',3,'p_vars','calcyacc.py',45),
-  ('vars2 -> varstype vars2','vars2',2,'p_vars','calcyacc.py',46),
-  ('vars2 -> empty','vars2',1,'p_vars','calcyacc.py',47),
-  ('varstype -> ID varstype2 COLON type SEMICOLON','varstype',5,'p_vars','calcyacc.py',48),
-  ('varstype2 -> COMMA ID varstype2','varstype2',3,'p_vars','calcyacc.py',49),
-  ('varstype2 -> empty','varstype2',1,'p_vars','calcyacc.py',50),
-  ('assign -> ID EQUAL expression SEMICOLON','assign',4,'p_assign','calcyacc.py',56),
-  ('exp -> term plus_minus','exp',2,'p_exp','calcyacc.py',63),
-  ('term -> factor multiply_divide','term',2,'p_term','calcyacc.py',69),
-  ('factor -> OPEN_PARENTHESIS expression CLOSE_PARENTHESIS','factor',3,'p_factor','calcyacc.py',75),
-  ('factor -> plus_minus_factor var_cte','factor',2,'p_factor','calcyacc.py',76),
-  ('var_cte -> ID','var_cte',1,'p_var_cte','calcyacc.py',82),
-  ('var_cte -> INT','var_cte',1,'p_var_cte','calcyacc.py',83),
-  ('var_cte -> FLOAT','var_cte',1,'p_var_cte','calcyacc.py',84),
-  ('plus_minus_factor -> PLUS','plus_minus_factor',1,'p_plus_minus_factor','calcyacc.py',90),
-  ('plus_minus_factor -> MINUS','plus_minus_factor',1,'p_plus_minus_factor','calcyacc.py',91),
-  ('plus_minus_factor -> empty','plus_minus_factor',1,'p_plus_minus_factor','calcyacc.py',92),
-  ('multiply_divide -> MULTIPLY term','multiply_divide',2,'p_multiply_divide','calcyacc.py',98),
-  ('multiply_divide -> DIVIDE term','multiply_divide',2,'p_multiply_divide','calcyacc.py',99),
-  ('multiply_divide -> empty','multiply_divide',1,'p_multiply_divide','calcyacc.py',100),
-  ('plus_minus -> PLUS exp','plus_minus',2,'p_plus_minus','calcyacc.py',106),
-  ('plus_minus -> MINUS exp','plus_minus',2,'p_plus_minus','calcyacc.py',107),
-  ('plus_minus -> empty','plus_minus',1,'p_plus_minus','calcyacc.py',108),
-  ('condition -> IF OPEN_PARENTHESIS expression CLOSE_PARENTHESIS block else SEMICOLON','condition',7,'p_condition','calcyacc.py',114),
-  ('else -> ELSE block','else',2,'p_condition_else','calcyacc.py',120),
-  ('else -> empty','else',1,'p_condition_else','calcyacc.py',121),
-  ('expression -> exp expression_def','expression',2,'p_expression','calcyacc.py',127),
-  ('expression_def -> GREATER_THAN exp','expression_def',2,'p_expression','calcyacc.py',128),
-  ('expression_def -> LESS_THAN exp','expression_def',2,'p_expression','calcyacc.py',129),
-  ('expression_def -> NOT_EQUAL exp','expression_def',2,'p_expression','calcyacc.py',130),
-  ('expression_def -> empty','expression_def',1,'p_expression','calcyacc.py',131),
-  ('write -> PRINT OPEN_PARENTHESIS write_exp CLOSE_PARENTHESIS SEMICOLON','write',5,'p_write','calcyacc.py',137),
-  ('write_exp -> expression','write_exp',1,'p_write_exp','calcyacc.py',143),
-  ('write_exp -> expression COMMA write_exp','write_exp',3,'p_write_exp','calcyacc.py',144),
-  ('write_exp -> STRING','write_exp',1,'p_write_exp','calcyacc.py',145),
-  ('write_exp -> STRING COMMA write_exp','write_exp',3,'p_write_exp','calcyacc.py',146),
-  ('type -> INT_ID','type',1,'p_type','calcyacc.py',152),
-  ('type -> FLOAT_ID','type',1,'p_type','calcyacc.py',153),
-  ('empty -> <empty>','empty',0,'p_empty','calcyacc.py',159),
+  ('program -> PROGRAM_ID ID SEMICOLON block','program',4,'p_expression_program','calcyacc.py',7),
+  ('program -> PROGRAM_ID ID SEMICOLON vars functions block','program',6,'p_expression_program_vars','calcyacc.py',14),
+  ('block -> OPEN_BRACKET block_statue CLOSE_BRACKET','block',3,'p_block','calcyacc.py',20),
+  ('block_statue -> statue block_statue','block_statue',2,'p_block_statue','calcyacc.py',27),
+  ('block_statue -> empty','block_statue',1,'p_block_statue','calcyacc.py',28),
+  ('statue -> assign','statue',1,'p_statue','calcyacc.py',35),
+  ('statue -> condition','statue',1,'p_statue','calcyacc.py',36),
+  ('statue -> write','statue',1,'p_statue','calcyacc.py',37),
+  ('vars -> VAR_ID varstype vars2','vars',3,'p_vars','calcyacc.py',44),
+  ('vars2 -> varstype vars2','vars2',2,'p_vars','calcyacc.py',45),
+  ('vars2 -> empty','vars2',1,'p_vars','calcyacc.py',46),
+  ('varstype -> ID varstype2 COLON type SEMICOLON','varstype',5,'p_vars','calcyacc.py',47),
+  ('varstype2 -> COMMA ID varstype2','varstype2',3,'p_vars','calcyacc.py',48),
+  ('varstype2 -> empty','varstype2',1,'p_vars','calcyacc.py',49),
+  ('functions -> FUNCTION_ID type ID OPEN_PARENTHESIS parameters CLOSE_PARENTHESIS block','functions',7,'p_functions','calcyacc.py',54),
+  ('functions -> empty','functions',1,'p_functions','calcyacc.py',55),
+  ('parameters -> type ID parameters2','parameters',3,'p_parameters','calcyacc.py',60),
+  ('parameters -> empty','parameters',1,'p_parameters','calcyacc.py',61),
+  ('parameters2 -> COMMA type ID parameters2','parameters2',4,'p_parameters','calcyacc.py',62),
+  ('parameters2 -> empty','parameters2',1,'p_parameters','calcyacc.py',63),
+  ('assign -> ID EQUAL expression SEMICOLON','assign',4,'p_assign','calcyacc.py',68),
+  ('exp -> term plus_minus','exp',2,'p_exp','calcyacc.py',75),
+  ('term -> factor multiply_divide','term',2,'p_term','calcyacc.py',81),
+  ('factor -> OPEN_PARENTHESIS expression CLOSE_PARENTHESIS','factor',3,'p_factor','calcyacc.py',87),
+  ('factor -> plus_minus_factor var_cte','factor',2,'p_factor','calcyacc.py',88),
+  ('var_cte -> ID','var_cte',1,'p_var_cte','calcyacc.py',94),
+  ('var_cte -> INT','var_cte',1,'p_var_cte','calcyacc.py',95),
+  ('var_cte -> FLOAT','var_cte',1,'p_var_cte','calcyacc.py',96),
+  ('plus_minus_factor -> PLUS','plus_minus_factor',1,'p_plus_minus_factor','calcyacc.py',102),
+  ('plus_minus_factor -> MINUS','plus_minus_factor',1,'p_plus_minus_factor','calcyacc.py',103),
+  ('plus_minus_factor -> empty','plus_minus_factor',1,'p_plus_minus_factor','calcyacc.py',104),
+  ('multiply_divide -> MULTIPLY term','multiply_divide',2,'p_multiply_divide','calcyacc.py',110),
+  ('multiply_divide -> DIVIDE term','multiply_divide',2,'p_multiply_divide','calcyacc.py',111),
+  ('multiply_divide -> empty','multiply_divide',1,'p_multiply_divide','calcyacc.py',112),
+  ('plus_minus -> PLUS exp','plus_minus',2,'p_plus_minus','calcyacc.py',118),
+  ('plus_minus -> MINUS exp','plus_minus',2,'p_plus_minus','calcyacc.py',119),
+  ('plus_minus -> empty','plus_minus',1,'p_plus_minus','calcyacc.py',120),
+  ('condition -> IF OPEN_PARENTHESIS expression CLOSE_PARENTHESIS block else SEMICOLON','condition',7,'p_condition','calcyacc.py',126),
+  ('else -> ELSE block','else',2,'p_condition_else','calcyacc.py',132),
+  ('else -> empty','else',1,'p_condition_else','calcyacc.py',133),
+  ('expression -> exp expression_def','expression',2,'p_expression','calcyacc.py',139),
+  ('expression_def -> GREATER_THAN exp','expression_def',2,'p_expression','calcyacc.py',140),
+  ('expression_def -> LESS_THAN exp','expression_def',2,'p_expression','calcyacc.py',141),
+  ('expression_def -> NOT_EQUAL exp','expression_def',2,'p_expression','calcyacc.py',142),
+  ('expression_def -> empty','expression_def',1,'p_expression','calcyacc.py',143),
+  ('write -> PRINT OPEN_PARENTHESIS write_exp CLOSE_PARENTHESIS SEMICOLON','write',5,'p_write','calcyacc.py',149),
+  ('write_exp -> expression','write_exp',1,'p_write_exp','calcyacc.py',155),
+  ('write_exp -> expression COMMA write_exp','write_exp',3,'p_write_exp','calcyacc.py',156),
+  ('write_exp -> STRING','write_exp',1,'p_write_exp','calcyacc.py',157),
+  ('write_exp -> STRING COMMA write_exp','write_exp',3,'p_write_exp','calcyacc.py',158),
+  ('type -> INT_ID','type',1,'p_type','calcyacc.py',164),
+  ('type -> FLOAT_ID','type',1,'p_type','calcyacc.py',165),
+  ('empty -> <empty>','empty',0,'p_empty','calcyacc.py',171),
 ]

@@ -8,6 +8,8 @@ reserved = {
     'var': 'VAR_ID',
     'float': 'FLOAT_ID',
     'int': 'INT_ID',
+    'function': 'FUNCTION_ID',
+    'return': 'RETURN_ID',
 }
 
 tokens = [
@@ -94,7 +96,11 @@ lexer = lex.lex()
 
 data = """
 program adrian;
-var a, b, c _d : int; j : float;
+var a, b, c, _d : int; j : float;
+function int five(int a) {
+    a = 6;
+    return a;
+}
 {
     a = 5 + 4;
     b = a;
