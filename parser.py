@@ -1,5 +1,5 @@
-import yacc
-from calclex import tokens, lexer
+from lib import yacc
+from lexer import tokens, lexer
 
 
 def p_expression_program(p):
@@ -35,6 +35,7 @@ def p_statue(p):
     statue : assign
            | condition
            | write
+           | return
     '''
     p[0] = p[1]
 
@@ -49,11 +50,13 @@ def p_vars(p):
               | empty
     '''
 
+
 def p_functions(p):
     '''
     functions : FUNCTION_ID type ID OPEN_PARENTHESIS parameters CLOSE_PARENTHESIS block
               | empty
     '''
+
 
 def p_parameters(p):
     '''
@@ -62,6 +65,7 @@ def p_parameters(p):
     parameters2 : COMMA type ID parameters2
                 | empty 
     '''
+
 
 def p_assign(p):
     '''
@@ -138,9 +142,17 @@ def p_expression(p):
     '''
     expression : exp expression_def
     expression_def : GREATER_THAN exp 
+               | GREATER_THAN_EQUAL exp 
                | LESS_THAN exp 
+               | LESS_THAN_EQUAL exp 
                | NOT_EQUAL exp 
                | empty
+    '''
+
+
+def p_return(p):
+    '''
+    return : RETURN_ID expression SEMICOLON
     '''
 
 

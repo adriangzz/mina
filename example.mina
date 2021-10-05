@@ -1,0 +1,20 @@
+program adrian;
+var a, b, c, _d : int; j : float;
+function int five(int a) {
+    a = 6;
+    return a;
+}
+{
+    a = 5 + 4;
+    b = a;
+    c = 45;
+    _d = 66;
+    j = 4.5;
+    if (a > c ) {
+        a = 50;
+    } else {
+        c = 10;
+    }
+    print(c);
+    a=b;
+}

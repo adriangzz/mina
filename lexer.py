@@ -1,4 +1,4 @@
-import lex
+from lib import lex
 
 reserved = {
     'if': 'IF',
@@ -13,7 +13,6 @@ reserved = {
 }
 
 tokens = [
-    'WORD',
     'INT',
     'FLOAT',
     'EQUAL',
