@@ -1,5 +1,5 @@
 from lib import yacc
-from lexer import tokens, lexer
+from parser.lexer import tokens, lexer
 
 
 def p_expression_program(p):
@@ -189,15 +189,16 @@ def p_error(p):
     print("Syntax error in input!", p)
 
 
-# Build the parser
-parser = yacc.yacc()
+def parseFile(file):
+    # Build the parser
+    parser = yacc.yacc()
 
-while True:
-    try:
-        s = input('>> ')
-    except EOFError:
-        break
-    if not s:
-        continue
-    result = parser.parse(s, lexer)
+    # while True:
+    # try:
+    #     s = input('>> ')
+    # except EOFError:
+    #     break
+    # if not s:
+    #     continue
+    result = parser.parse(file, lexer)
     print(result)

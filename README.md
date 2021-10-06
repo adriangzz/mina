@@ -11,7 +11,7 @@ To use python3 must be installed in the system
 Run:
 
 ```python
-python3 calcyacc.py
+python3 main.py <NameOfFile>
 ```
 
 Then enter the program in the command line.

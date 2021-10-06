@@ -14,7 +14,6 @@ function int five(int a) {
         a = 50;
     } else {
         c = 10;
-    }
-    print(c);
-    a=b;
+    };
+    a = b;
 }
