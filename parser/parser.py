@@ -261,5 +261,4 @@ def parseFile(file):
     #     break
     # if not s:
     #     continue
-    result = parser.parse(file, lexer)
-    print(result)
+    parser.parse(file, lexer)
