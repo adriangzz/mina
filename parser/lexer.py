@@ -33,7 +33,8 @@ tokens = [
     'COLON',
     'COMMA',
     'STRING',
-    'ID'
+    'ARRAY',
+    'ID',
 ] + list(reserved.values())
 
 t_SEMICOLON = r';'
@@ -73,6 +74,12 @@ def t_INT(t):
 
 
 t_ignore = ' \t'
+
+
+def t_ARRAY(t):
+    r'_?[a-zA-Z][a-zA-Z0-9]*(\[\d+\])'
+    t.type = reserved.get(t.value, 'ARRAY')    # Check for reserved words
+    return t
 
 
 def t_ID(t):
