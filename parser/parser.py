@@ -6,7 +6,6 @@ def p_expression_program(p):
     '''
     program : PROGRAM_ID ID SEMICOLON block
     '''
-    p[0] = p[1]
 
 
 def p_expression_program_vars(p):
@@ -19,7 +18,6 @@ def p_block(p):
     '''
     block : OPEN_BRACKET block_statue CLOSE_BRACKET
     '''
-    p[0] = p[2]
 
 
 def p_block_statue(p):
@@ -27,7 +25,6 @@ def p_block_statue(p):
     block_statue : statue block_statue
                  | empty
     '''
-    p[0] = p[1]
 
 
 def p_statue(p):
@@ -37,7 +34,6 @@ def p_statue(p):
            | write
            | return
     '''
-    p[0] = p[1]
 
 
 def p_vars(p):
@@ -45,9 +41,16 @@ def p_vars(p):
     vars : VAR_ID varstype vars2
     vars2 : varstype vars2
           | empty
-    varstype : ID varstype2 COLON type SEMICOLON
-    varstype2 : COMMA ID varstype2
+    varstype : id_arr varstype2 COLON type SEMICOLON
+    varstype2 : COMMA id_arr varstype2
               | empty
+    '''
+
+
+def p_id_arr(p):
+    '''
+    id_arr : ID
+           | ARRAY
     '''
 
 
@@ -71,26 +74,42 @@ def p_assign(p):
     '''
     assign : ID EQUAL expression SEMICOLON
     '''
-    p[0] = ('=', p[1], p[3])
 
 
 def p_exp(p):
     '''
-    exp : term plus_minus
+    exp : term 
+        | term plus_minus exp
     '''
+    if (len(p) == 2):
+        p[0] = p[1]
+    else:
+        p[0] = (p[2], p[1], p[3])
 
 
 def p_term(p):
     '''
-    term : factor multiply_divide
+    term : factor 
+         | factor multiply_divide term
     '''
+    if (len(p) == 2):
+        p[0] = p[1]
+    else:
+        p[0] = (p[2], p[1], p[3])
 
 
 def p_factor(p):
     '''
     factor : OPEN_PARENTHESIS expression CLOSE_PARENTHESIS
            | plus_minus_factor var_cte
+           | var_cte
     '''
+    if (len(p) == 4):
+        p[0] = p[2]
+    elif (len(p) == 3):
+        p[0] = (p[1], p[2])
+    else:
+        p[0] = p[1]
 
 
 def p_var_cte(p):
@@ -99,6 +118,7 @@ def p_var_cte(p):
             | INT 
             | FLOAT
     '''
+    p[0] = p[1]
 
 
 def p_plus_minus_factor(p):
@@ -107,22 +127,24 @@ def p_plus_minus_factor(p):
                       | MINUS 
                       | empty
     '''
+    p[0] = p[1]
 
 
 def p_multiply_divide(p):
     '''
-    multiply_divide : MULTIPLY term 
-                    | DIVIDE term 
-                    | empty
+    multiply_divide : MULTIPLY
+                    | DIVIDE 
+
     '''
+    p[0] = p[1]
 
 
 def p_plus_minus(p):
     '''
-    plus_minus : PLUS exp 
-               | MINUS exp 
-               | empty
+    plus_minus : PLUS 
+               | MINUS
     '''
+    p[0] = p[1]
 
 
 def p_condition(p):
@@ -140,14 +162,17 @@ def p_condition_else(p):
 
 def p_expression(p):
     '''
-    expression : exp expression_def
-    expression_def : GREATER_THAN exp 
-               | GREATER_THAN_EQUAL exp 
-               | LESS_THAN exp 
-               | LESS_THAN_EQUAL exp 
-               | NOT_EQUAL exp 
-               | empty
+    expression : exp 
+               | exp GREATER_THAN exp 
+               | exp GREATER_THAN_EQUAL exp 
+               | exp LESS_THAN exp 
+               | exp LESS_THAN_EQUAL exp 
+               | exp NOT_EQUAL exp 
     '''
+    if (len(p) == 2):
+        p[0] = run(p[1])
+    else:
+        p[0] = (p[2], p[1], p[3])
 
 
 def p_return(p):
@@ -169,6 +194,7 @@ def p_write_exp(p):
               | STRING
               | STRING COMMA write_exp
     '''
+    print(p[1])
 
 
 def p_type(p):
@@ -176,17 +202,32 @@ def p_type(p):
     type : INT_ID
          | FLOAT_ID
     '''
-    p[0] = p[1]
 
 
 def p_empty(p):
-    'empty :'
-    pass
+    '''
+    empty :
+    '''
+    p[0] = None
 
 
 # Error rule for syntax errors
 def p_error(p):
     print("Syntax error in input!", p)
+
+
+def run(p):
+    if type(p) == tuple:
+        if (p[0] == '+'):
+            return run(p[1]) + run(p[2])
+        if (p[0] == '-'):
+            return run(p[1]) - run(p[2])
+        if (p[0] == '*'):
+            return run(p[1]) * run(p[2])
+        if (p[0] == '/'):
+            return run(p[1]) / run(p[2])
+    else:
+        return p
 
 
 def parseFile(file):
