@@ -254,11 +254,5 @@ def parseFile(file):
     # Build the parser
     parser = yacc.yacc()
 
-    # while True:
-    # try:
-    #     s = input('>> ')
-    # except EOFError:
-    #     break
-    # if not s:
-    #     continue
+    # Parse the file
     parser.parse(file, lexer)
