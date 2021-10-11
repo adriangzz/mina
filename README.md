@@ -11,10 +11,8 @@ To use python3 must be installed in the system
 Run:
 
 ```python
-python3 main.py <NameOfFile>
+python3 main.py <filename>
 ```
-
-Then enter the program in the command line.
 
 ## License
 
