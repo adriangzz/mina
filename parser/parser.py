@@ -239,6 +239,8 @@ def run(p):
         elif (p[0] == '/'):
             return run(p[1]) / run(p[2])
         elif (p[0] == '='):
+            if p[1] not in env:
+                return 'Undeclared variable found!'
             env[p[1]] = run(p[2])
             return ''
         elif (p[0] == 'var'):
