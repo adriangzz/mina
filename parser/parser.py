@@ -74,6 +74,8 @@ def p_assign(p):
     '''
     assign : ID EQUAL expression SEMICOLON
     '''
+    p[0] = (p[2], p[1], p[3])
+    run(p[0])
 
 
 def p_exp(p):
@@ -114,11 +116,17 @@ def p_factor(p):
 
 def p_var_cte(p):
     '''
-    var_cte : ID 
-            | INT 
+    var_cte : INT 
             | FLOAT
     '''
     p[0] = p[1]
+
+
+def p_var_cte_ID(p):
+    '''
+    var_cte : ID 
+    '''
+    p[0] = ('var', p[1])
 
 
 def p_plus_minus_factor(p):
@@ -216,16 +224,28 @@ def p_error(p):
     print("Syntax error in input!", p)
 
 
+env = {}
+
+
 def run(p):
+    global env
     if type(p) == tuple:
         if (p[0] == '+'):
             return run(p[1]) + run(p[2])
-        if (p[0] == '-'):
+        elif (p[0] == '-'):
             return run(p[1]) - run(p[2])
-        if (p[0] == '*'):
+        elif (p[0] == '*'):
             return run(p[1]) * run(p[2])
-        if (p[0] == '/'):
+        elif (p[0] == '/'):
             return run(p[1]) / run(p[2])
+        elif (p[0] == '='):
+            env[p[1]] = run(p[2])
+            return ''
+        elif (p[0] == 'var'):
+            if p[1] not in env:
+                return 'Undeclared variable found!'
+            else:
+                return env[p[1]]
     else:
         return p
 
