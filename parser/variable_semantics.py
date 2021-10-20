@@ -67,6 +67,16 @@ class FunctionTable(object):
             return True
         return False
 
+    def deleteFunctionVariables(self, name: str) -> bool:
+        '''
+        Deletes function given the name.
+        Returns true if deleted, false otherwise.
+        '''
+        if name in self.functionNameMap:
+            self.functionNameMap[name].pop('variables')
+            return True
+        return False
+
     def functionExists(self, name: str) -> bool:
         '''
         Returns true if function exists in table, false otherwise.

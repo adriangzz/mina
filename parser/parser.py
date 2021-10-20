@@ -65,7 +65,7 @@ def p_statue(p):
 
 def p_vars(p):
     '''
-    vars : VAR_ID type varstype vars
+    vars : VAR_ID type varstype
          | empty
     '''
 
@@ -103,10 +103,13 @@ def p_id_arr(p):
 
 def p_functions(p):
     '''
-    functions : functions_id OPEN_PARENTHESIS parameters CLOSE_PARENTHESIS block functions
+    functions : functions_id OPEN_PARENTHESIS parameters CLOSE_PARENTHESIS block
               | empty
     '''
-    table.setCurrentFunction(table.getProgramName())
+    if len(p) > 2:
+        # Delete function table after finishing parsing
+        table.deleteFunctionVariables(table.getCurrentFunction())
+        table.setCurrentFunction(table.getProgramName())
 
 
 def p_functions_id(p):
