@@ -110,9 +110,9 @@ def p_functions_id(p):
 
 def p_parameters(p):
     '''
-    parameters : type ID parameters2 
+    parameters : type assign_id_arr parameters2 
                | empty
-    parameters2 : COMMA type ID parameters2
+    parameters2 : COMMA type assign_id_arr parameters2
                 | empty 
     '''
 
@@ -275,37 +275,11 @@ def p_error(p):
     print("Syntax error in input!", p)
 
 
-env = {}
-
-
-def run(p):
-    global env
-    if type(p) == tuple:
-        if (p[0] == '+'):
-            return run(p[1]) + run(p[2])
-        elif (p[0] == '-'):
-            return run(p[1]) - run(p[2])
-        elif (p[0] == '*'):
-            return run(p[1]) * run(p[2])
-        elif (p[0] == '/'):
-            return run(p[1]) / run(p[2])
-        elif (p[0] == '='):
-            if p[1] not in env:
-                return 'Undeclared variable found!'
-            env[p[1]] = run(p[2])
-            return ''
-        elif (p[0] == 'var'):
-            if p[1] not in env:
-                return 'Undeclared variable found!'
-            else:
-                return env[p[1]]
-    else:
-        return p
-
-
 def parseFile(file):
     # Build the parser
     parser = yacc.yacc()
 
     # Parse the file
     parser.parse(file, lexer)
+    print(table.getFunctions())
+    table.deleteTable()
