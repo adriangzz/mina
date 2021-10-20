@@ -8,7 +8,7 @@ table = FunctionTable()
 
 def p_expression_program(p):
     '''
-    program : program_id SEMICOLON vars functions main
+    program : program_id SEMICOLON vars_functions main
     '''
 
 
@@ -18,6 +18,13 @@ def p_program_id(p):
     '''
     table.setProgramName(p[2])
     table.addFunction({'name': p[2], 'type': 'void', 'variables': {}})
+
+
+def p_vars_functions(p):
+    '''
+    vars_functions : vars functions vars_functions
+                   | empty
+    '''
 
 
 def p_main(p):
@@ -99,6 +106,7 @@ def p_functions(p):
     functions : functions_id OPEN_PARENTHESIS parameters CLOSE_PARENTHESIS block functions
               | empty
     '''
+    table.setCurrentFunction(table.getProgramName())
 
 
 def p_functions_id(p):

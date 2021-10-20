@@ -103,6 +103,12 @@ class FunctionTable(object):
         '''
         self.programName = name
 
+    def getProgramName(self) -> str:
+        '''
+        Gets program name.
+        '''
+        return self.programName
+
     def checkVariableExists(self, name: str) -> None:
         '''
         Checks if variable is declared, raises syntax error if not.
