@@ -10,6 +10,7 @@ reserved = {
     'int': 'INT_ID',
     'function': 'FUNCTION_ID',
     'return': 'RETURN_ID',
+    'main': 'MAIN_ID',
 }
 
 tokens = [
@@ -99,37 +100,3 @@ def t_error(t):
 
 
 lexer = lex.lex()
-
-data = """
-program adrian;
-var a, b, c, _d : int; j : float;
-function int five(int a) {
-    a = 6;
-    return a;
-}
-{
-    a = 5 + 4;
-    b = a;
-    c = 45;
-    _d = 66;
-    j = 4.5;
-    if (a > c ) {
-        a = 50;
-    } else {
-        c = 10;
-    }
-    print(c);
-    a=b;
-}
-
-"""
-
-# # Give the lexer some input
-# lexer.input(data)
-
-# # Tokenize
-# while True:
-#     tok = lexer.token()
-#     if not tok:
-#         break      # No more input
-#     print(tok)
