@@ -1,17 +1,35 @@
 from lib import yacc
 from parser.lexer import tokens, lexer
+from parser.variable_semantics import FunctionTable
+
+table = FunctionTable()
 
 
 def p_expression_program(p):
     '''
-    program : PROGRAM_ID ID SEMICOLON block
+    program : program_id SEMICOLON vars functions main
     '''
 
 
-def p_expression_program_vars(p):
+def p_program_id(p):
     '''
-    program : PROGRAM_ID ID SEMICOLON vars functions block
+    program_id : PROGRAM_ID ID
     '''
+    table.addFunction({'name': p[2], 'type': 'void', 'variables': {}})
+    print(p[2])
+
+
+def p_main(p):
+    '''
+    main : main_id block
+    '''
+
+
+def p_main_id(p):
+    '''
+    main_id : MAIN_ID OPEN_PARENTHESIS CLOSE_PARENTHESIS
+    '''
+    table.addFunction({'name': p[1], 'variables': {}})
 
 
 def p_block(p):
@@ -29,7 +47,8 @@ def p_block_statue(p):
 
 def p_statue(p):
     '''
-    statue : assign
+    statue : vars
+           | assign
            | condition
            | write
            | return
@@ -38,13 +57,26 @@ def p_statue(p):
 
 def p_vars(p):
     '''
-    vars : VAR_ID varstype vars2
-    vars2 : varstype vars2
-          | empty
-    varstype : id_arr varstype2 COLON type SEMICOLON
-    varstype2 : COMMA id_arr varstype2
+    vars : VAR_ID type varstype vars
+         | empty
+    '''
+
+
+def p_vars_type(p):
+    '''
+    varstype : assign_id_arr varstype2 SEMICOLON
+    varstype2 : COMMA assign_id_arr varstype2
               | empty
     '''
+
+
+def p_assign_id_arr(p):
+    '''
+    assign_id_arr : ID
+                  | ARRAY
+    '''
+    currType = table.getCurrentType()
+    table.addVariables({'name': p[1], 'type': currType})
 
 
 def p_id_arr(p):
@@ -56,9 +88,17 @@ def p_id_arr(p):
 
 def p_functions(p):
     '''
-    functions : FUNCTION_ID type ID OPEN_PARENTHESIS parameters CLOSE_PARENTHESIS block
+    functions : functions_id OPEN_PARENTHESIS parameters CLOSE_PARENTHESIS block functions
               | empty
     '''
+
+
+def p_functions_id(p):
+    '''
+    functions_id : FUNCTION_ID type ID
+    '''
+    table.addFunction({'name': p[3], 'type': p[2], 'variables': {}})
+    print(p[3])
 
 
 def p_parameters(p):
@@ -72,10 +112,10 @@ def p_parameters(p):
 
 def p_assign(p):
     '''
-    assign : ID EQUAL expression SEMICOLON
+    assign : id_arr EQUAL expression SEMICOLON
     '''
     p[0] = (p[2], p[1], p[3])
-    run(p[0])
+    # run(p[0])
 
 
 def p_exp(p):
@@ -178,7 +218,7 @@ def p_expression(p):
                | exp NOT_EQUAL exp 
     '''
     if (len(p) == 2):
-        p[0] = run(p[1])
+        p[0] = p[1]
     else:
         p[0] = (p[2], p[1], p[3])
 
@@ -202,7 +242,6 @@ def p_write_exp(p):
               | STRING
               | STRING COMMA write_exp
     '''
-    print(p[1])
 
 
 def p_type(p):
@@ -210,6 +249,8 @@ def p_type(p):
     type : INT_ID
          | FLOAT_ID
     '''
+    table.setCurrentType(p[1])
+    p[0] = p[1]
 
 
 def p_empty(p):
@@ -258,3 +299,4 @@ def parseFile(file):
 
     # Parse the file
     parser.parse(file, lexer)
+    print(table.getFunctions())
