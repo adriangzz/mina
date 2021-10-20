@@ -10,19 +10,21 @@ class FunctionTable(object):
 
     def __init__(self) -> None:
         self.funcNameMap = {}
-        self.currFunc = ''
+        self.currFunction = ''
+        self.currType = ''
 
-    def addFunction(self, row: dict) -> bool:
+    def addFunction(self, row: dict) -> None:
         '''
         Checks name of function does not exist, then adds it to the dictionary using it's name as key.
         Sets current function as this function.
-        Returns true if added, otherwise false.
+        Raises syntaxerror if function already exists.
         '''
         if row['name'] not in self.funcNameMap:
             self.funcNameMap[row['name']] = row
-            self.currFunc = row['name']
-            return True
-        return False
+            self.currFunction = row['name']
+        else:
+            print("Error: function name already in use")
+            raise SyntaxError
 
     def addVariables(self, row: dict, name: str = None) -> bool:
         '''
@@ -32,12 +34,13 @@ class FunctionTable(object):
         '''
         if name and name in self.funcNameMap and row['name'] not in self.funcNameMap[name]['variables']:
             self.funcNameMap[name]['variables'][row['name']] = row
-            return True
+        elif row['name'] not in self.funcNameMap[self.currFunction]['variables']:
+            self.funcNameMap[self.currFunction]['variables'][row['name']] = row
         else:
-            if row['name'] not in self.funcNameMap[self.currFunc]['variables']:
-                self.funcNameMap[self.currFunc]['variables'][row['name']] = row
-                return True
-        return False
+            print(row, self.currFunction, self.currType,
+                  self.funcNameMap[self.currFunction])
+            print("Error: variable name already in use")
+            raise SyntaxError
 
     def getFunction(self, name: str) -> dict:
         '''
@@ -70,11 +73,26 @@ class FunctionTable(object):
         '''
         return name in self.funcNameMap
 
+    def setCurrentFunction(self, name: str) -> None:
+        '''
+        Sets current function.
+        '''
+        self.currFunction = name
 
-table = FunctionTable()
-table.addFunction({'name': 'adrian', 'variables': {}})
-table.addFunction({'name': 'david', 'variables': {}})
-table.addVariables({'name': 'a', 'type': 'int'})
-table.addVariables({'name': 'b', 'type': 'float'})
-print(table.addVariables({'name': 'a', 'type': 'string'}, "d"))
-print(table.getFunctions())
+    def getCurrentFunction(self) -> str:
+        '''
+        Gets current function.
+        '''
+        return self.currFunction
+
+    def getCurrentType(self) -> str:
+        '''
+        Returns current type.
+        '''
+        return self.currType
+
+    def setCurrentType(self, name: str) -> None:
+        '''
+        Sets current type.
+        '''
+        self.currType = name
