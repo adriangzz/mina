@@ -9,7 +9,7 @@ class FunctionTable(object):
     '''
 
     def __init__(self) -> None:
-        self.funcNameMap = {}
+        self.functionNameMap = {}
         self.currFunction = ''
         self.programName = ''
         self.currType = ''
@@ -20,8 +20,8 @@ class FunctionTable(object):
         Sets current function as this function.
         Raises syntaxerror if function already exists.
         '''
-        if row['name'] not in self.funcNameMap:
-            self.funcNameMap[row['name']] = row
+        if row['name'] not in self.functionNameMap:
+            self.functionNameMap[row['name']] = row
             self.currFunction = row['name']
         else:
             print("Error: function name already in use")
@@ -33,14 +33,13 @@ class FunctionTable(object):
         Uses last added function as default, but an extra optional parameter with the name of the function is accepted.
         Returns true if variables were added, false otherwise.
         '''
-        if name and name in self.funcNameMap and row['name'] not in self.funcNameMap[name]['variables']:
-            self.funcNameMap[name]['variables'][row['name']] = row
-        elif row['name'] not in self.funcNameMap[self.currFunction]['variables']:
-            self.funcNameMap[self.currFunction]['variables'][row['name']] = row
+        if name and name in self.functionNameMap and row['name'] not in self.functionNameMap[name]['variables']:
+            self.functionNameMap[name]['variables'][row['name']] = row
+        elif row['name'] not in self.functionNameMap[self.currFunction]['variables']:
+            self.functionNameMap[self.currFunction]['variables'][row['name']] = row
         else:
-            print(row, self.currFunction, self.currType,
-                  self.funcNameMap[self.currFunction])
-            print("Error: variable name already in use")
+            print("Error: variable name '" +
+                  row['name'] + "' already in use")
             raise SyntaxError
 
     def getFunction(self, name: str) -> dict:
@@ -48,23 +47,23 @@ class FunctionTable(object):
         Function that returns the dictionary of the name of function given.
         Returns empty dict if name does not exist.
         '''
-        if name in self.funcNameMap:
-            return self.funcNameMap[name]
+        if name in self.functionNameMap:
+            return self.functionNameMap[name]
         return {}
 
     def getFunctions(self) -> dict:
         '''
         Returns the whole dictionary of functions and variables.
         '''
-        return self.funcNameMap
+        return self.functionNameMap
 
     def deleteFunction(self, name: str) -> bool:
         '''
         Deletes function given the name.
         Returns true if deleted, false otherwise.
         '''
-        if name in self.funcNameMap:
-            self.funcNameMap.pop(name)
+        if name in self.functionNameMap:
+            self.functionNameMap.pop(name)
             return True
         return False
 
@@ -72,7 +71,7 @@ class FunctionTable(object):
         '''
         Returns true if function exists in table, false otherwise.
         '''
-        return name in self.funcNameMap
+        return name in self.functionNameMap
 
     def setCurrentFunction(self, name: str) -> None:
         '''
@@ -108,9 +107,13 @@ class FunctionTable(object):
         '''
         Checks if variable is declared, raises syntax error if not.
         '''
-        if name not in self.funcNameMap[self.currFunction]['variables'] and name not in self.funcNameMap[self.programName]['variables']:
-            print(self.currFunction, self.programName,
-                  self.funcNameMap[self.currFunction]['variables'])
+        if name not in self.functionNameMap[self.currFunction]['variables'] and name not in self.functionNameMap[self.programName]['variables']:
             print(
                 f'Error: variable {name} not declared in scope or global variables')
             raise SyntaxError
+
+    def deleteTable(self) -> None:
+        '''
+        Deletes table.
+        '''
+        del self.functionNameMap
