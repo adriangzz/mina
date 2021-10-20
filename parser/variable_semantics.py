@@ -11,6 +11,7 @@ class FunctionTable(object):
     def __init__(self) -> None:
         self.funcNameMap = {}
         self.currFunction = ''
+        self.programName = ''
         self.currType = ''
 
     def addFunction(self, row: dict) -> None:
@@ -96,3 +97,20 @@ class FunctionTable(object):
         Sets current type.
         '''
         self.currType = name
+
+    def setProgramName(self, name: str) -> None:
+        '''
+        Sets program name.
+        '''
+        self.programName = name
+
+    def checkVariableExists(self, name: str) -> None:
+        '''
+        Checks if variable is declared, raises syntax error if not.
+        '''
+        if name not in self.funcNameMap[self.currFunction]['variables'] and name not in self.funcNameMap[self.programName]['variables']:
+            print(self.currFunction, self.programName,
+                  self.funcNameMap[self.currFunction]['variables'])
+            print(
+                f'Error: variable {name} not declared in scope or global variables')
+            raise SyntaxError

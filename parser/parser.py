@@ -1,6 +1,7 @@
 from lib import yacc
 from parser.lexer import tokens, lexer
 from parser.variable_semantics import FunctionTable
+import re
 
 table = FunctionTable()
 
@@ -15,8 +16,8 @@ def p_program_id(p):
     '''
     program_id : PROGRAM_ID ID
     '''
+    table.setProgramName(p[2])
     table.addFunction({'name': p[2], 'type': 'void', 'variables': {}})
-    print(p[2])
 
 
 def p_main(p):
@@ -75,8 +76,12 @@ def p_assign_id_arr(p):
     assign_id_arr : ID
                   | ARRAY
     '''
+    # Get current type
     currType = table.getCurrentType()
-    table.addVariables({'name': p[1], 'type': currType})
+
+    # Get var name without brackets
+    varName = re.findall('_?[a-zA-Z][a-zA-Z0-9]*', p[1])[0]
+    table.addVariables({'name': varName, 'type': currType})
 
 
 def p_id_arr(p):
@@ -84,6 +89,9 @@ def p_id_arr(p):
     id_arr : ID
            | ARRAY
     '''
+    # Get var name without brackets
+    varName = re.findall('_?[a-zA-Z][a-zA-Z0-9]*', p[1])[0]
+    table.checkVariableExists(varName)
 
 
 def p_functions(p):
@@ -98,7 +106,6 @@ def p_functions_id(p):
     functions_id : FUNCTION_ID type ID
     '''
     table.addFunction({'name': p[3], 'type': p[2], 'variables': {}})
-    print(p[3])
 
 
 def p_parameters(p):
@@ -164,9 +171,12 @@ def p_var_cte(p):
 
 def p_var_cte_ID(p):
     '''
-    var_cte : ID 
+    var_cte : ID
+            | ARRAY 
     '''
-    p[0] = ('var', p[1])
+    # Get var name without brackets
+    varName = re.findall('_?[a-zA-Z][a-zA-Z0-9]*', p[1])[0]
+    table.checkVariableExists(varName)
 
 
 def p_plus_minus_factor(p):
@@ -299,4 +309,3 @@ def parseFile(file):
 
     # Parse the file
     parser.parse(file, lexer)
-    print(table.getFunctions())
