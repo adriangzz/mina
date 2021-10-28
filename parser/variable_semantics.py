@@ -133,3 +133,12 @@ class FunctionTable(object):
         Deletes table.
         '''
         del self.functionNameMap
+
+
+class SemanticCube(object):
+    '''
+    Class to keep have fast search of the semantic cube
+    '''
+
+    def __init__(self) -> None:
+        self.functionNameMap = {}
