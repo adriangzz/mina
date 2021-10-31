@@ -137,8 +137,91 @@ class FunctionTable(object):
 
 class SemanticCube(object):
     '''
-    Class to keep have fast search of the semantic cube
+    Class to keep semantic cube and access it.
+    It utilizes a dictornay of dictionaries to access the result in constant O(1) time.
     '''
 
     def __init__(self) -> None:
-        self.functionNameMap = {}
+        self.cube = {
+            "int": {
+                "int": {
+                    "+": "int",
+                    "/": "int",
+                    "<": "bool",
+                },
+                "float": {
+                    "+": "float",
+                    "/": "float",
+                    "<": "bool",
+                },
+                "char": {
+                    "+": "err",
+                    "/": "err",
+                    "<": "err",
+                },
+
+            },
+            "float": {
+                "int": {
+                    "+": "float",
+                    "/": "float",
+                    "<": "bool",
+                },
+                "float": {
+                    "+": "float",
+                    "/": "float",
+                    "<": "bool",
+                },
+                "char": {
+                    "+": "err",
+                    "/": "err",
+                    "<": "err",
+                },
+
+            },
+            "char": {
+                "int": {
+                    "+": "err",
+                    "/": "err",
+                    "<": "err",
+                },
+                "float": {
+                    "+": "err",
+                    "/": "err",
+                    "<": "err",
+                },
+                "char": {
+                    "+": "err",
+                    "/": "err",
+                    "<": "err",
+                },
+
+            },
+        }
+
+    def getResult(self, leftOp: str, rightOp: str, symb: str) -> str:
+        '''
+        Function that given the left, right operator and the symbol returns the semantic result.
+        '''
+        if symb == '-' or symb == '+':
+            symb = '+'
+        elif symb == '*' or symb == '/':
+            symb = '/'
+        elif symb == '<' or symb == '>' or symb == '>=' or symb == '<=' or symb == '==' or symb == '!=':
+            symb = '<'
+
+        if leftOp in self.cube:
+            if rightOp in self.cube[leftOp]:
+                if symb in self.cube[leftOp][rightOp]:
+                    ans = self.cube[leftOp][rightOp][symb]
+
+                    if ans != 'err':
+                        return ans
+
+        print(f'Error: semantic not recognized')
+        raise SyntaxError
+
+
+sc = SemanticCube()
+
+print(sc.getResult('int', 'char', '>'))
