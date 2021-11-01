@@ -1,4 +1,3 @@
-
 class FunctionTable(object):
     '''
     Class to keep variable semantics.
@@ -220,8 +219,3 @@ class SemanticCube(object):
 
         print(f'Error: semantic not recognized')
         raise SyntaxError
-
-
-sc = SemanticCube()
-
-print(sc.getResult('int', 'char', '>'))
