@@ -118,14 +118,17 @@ class FunctionTable(object):
         '''
         return self.programName
 
-    def checkVariableExists(self, name: str) -> None:
+    def getVariable(self, name: str) -> dict:
         '''
-        Checks if variable is declared, raises syntax error if not.
+        Checks if variable is declared and returns it's info, raises syntax error if not declared.
         '''
-        if name not in self.functionNameMap[self.currFunction]['variables'] and name not in self.functionNameMap[self.programName]['variables']:
-            print(
-                f'Error: variable {name} not declared in scope or global variables')
-            raise SyntaxError
+        if name in self.functionNameMap[self.currFunction]['variables']:
+            return self.functionNameMap[self.currFunction]['variables'][name]
+        elif name in self.functionNameMap[self.programName]['variables'][name]:
+            return self.functionNameMap[self.programName]['variables'][name]
+        print(
+            f'Error: variable {name} not declared in scope or global variables')
+        raise SyntaxError
 
     def deleteTable(self) -> None:
         '''
