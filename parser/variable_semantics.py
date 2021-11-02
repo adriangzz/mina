@@ -150,16 +150,19 @@ class SemanticCube(object):
                     "+": "int",
                     "/": "int",
                     "<": "bool",
+                    "=": "int",
                 },
                 "float": {
                     "+": "float",
                     "/": "float",
                     "<": "bool",
+                    "=": "int",
                 },
                 "char": {
                     "+": "err",
                     "/": "err",
                     "<": "err",
+                    "=": "err",
                 },
 
             },
@@ -168,16 +171,19 @@ class SemanticCube(object):
                     "+": "float",
                     "/": "float",
                     "<": "bool",
+                    "=": "float",
                 },
                 "float": {
                     "+": "float",
                     "/": "float",
                     "<": "bool",
+                    "=": "float",
                 },
                 "char": {
                     "+": "err",
                     "/": "err",
                     "<": "err",
+                    "=": "err",
                 },
 
             },
@@ -186,16 +192,19 @@ class SemanticCube(object):
                     "+": "err",
                     "/": "err",
                     "<": "err",
+                    "=": "err",
                 },
                 "float": {
                     "+": "err",
                     "/": "err",
                     "<": "err",
+                    "=": "err",
                 },
                 "char": {
                     "+": "err",
                     "/": "err",
                     "<": "err",
+                    "=": "char",
                 },
 
             },
@@ -204,6 +213,7 @@ class SemanticCube(object):
     def getResult(self, leftOp: str, rightOp: str, symb: str) -> str:
         '''
         Function that given the left, right operator and the symbol returns the semantic result.
+        If result is error, a syntax error will be raised.
         '''
         if symb == '-' or symb == '+':
             symb = '+'
