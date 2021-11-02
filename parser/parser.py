@@ -1,9 +1,11 @@
 from lib import yacc
 from parser.lexer import tokens, lexer
+from parser.quadruples import Quadruples
 from parser.variable_semantics import FunctionTable
 import re
 
 table = FunctionTable()
+quad = Quadruples()
 
 
 def p_expression_program(p):
@@ -98,7 +100,10 @@ def p_id_arr(p):
     '''
     # Get var name without brackets
     varName = re.findall('_?[a-zA-Z][a-zA-Z0-9]*', p[1])[0]
-    table.checkVariableExists(varName)
+    var = table.getVariable(varName)
+
+    quad.push(var['name'], var['type'])
+    quad.checkOperator(['*', '/'])
 
 
 def p_functions(p):
@@ -130,10 +135,16 @@ def p_parameters(p):
 
 def p_assign(p):
     '''
-    assign : id_arr EQUAL expression SEMICOLON
+    assign : id_arr equal_assign expression SEMICOLON
     '''
-    p[0] = (p[2], p[1], p[3])
-    # run(p[0])
+    quad.checkOperatorLowLevel(['='])
+
+
+def p_equal_assign(p):
+    '''
+    equal_assign : EQUAL_ASSIGN
+    '''
+    quad.push(p[1], "operator")
 
 
 def p_exp(p):
@@ -141,10 +152,6 @@ def p_exp(p):
     exp : term 
         | term plus_minus exp
     '''
-    if (len(p) == 2):
-        p[0] = p[1]
-    else:
-        p[0] = (p[2], p[1], p[3])
 
 
 def p_term(p):
@@ -152,32 +159,51 @@ def p_term(p):
     term : factor 
          | factor multiply_divide term
     '''
-    if (len(p) == 2):
-        p[0] = p[1]
-    else:
-        p[0] = (p[2], p[1], p[3])
+    quad.checkOperator(['+', '-'])
 
 
 def p_factor(p):
     '''
-    factor : OPEN_PARENTHESIS expression CLOSE_PARENTHESIS
-           | plus_minus_factor var_cte
+    factor : open_parenthesis expression close_parenthesis
+           | plus_minus var_cte
            | var_cte
     '''
-    if (len(p) == 4):
-        p[0] = p[2]
-    elif (len(p) == 3):
-        p[0] = (p[1], p[2])
-    else:
-        p[0] = p[1]
+
+
+def p_open_parenthesis(p):
+    '''
+    open_parenthesis : OPEN_PARENTHESIS
+    '''
+    quad.push(p[1], "operator")
+
+
+def p_close_parenthesis(p):
+    '''
+    close_parenthesis : CLOSE_PARENTHESIS
+    '''
+    quad.push(p[1], "operator")
 
 
 def p_var_cte(p):
     '''
-    var_cte : INT 
-            | FLOAT
+    var_cte : int 
+            | float
     '''
-    p[0] = p[1]
+    quad.checkOperator(['*', '/'])
+
+
+def p_int(p):
+    '''
+    int : INT
+    '''
+    quad.push(p[1], "int")
+
+
+def p_float(p):
+    '''
+    float : FLOAT
+    '''
+    quad.push(p[1], "float")
 
 
 def p_var_cte_ID(p):
@@ -187,16 +213,10 @@ def p_var_cte_ID(p):
     '''
     # Get var name without brackets
     varName = re.findall('_?[a-zA-Z][a-zA-Z0-9]*', p[1])[0]
-    table.checkVariableExists(varName)
+    var = table.getVariable(varName)
 
-
-def p_plus_minus_factor(p):
-    '''
-    plus_minus_factor : PLUS 
-                      | MINUS 
-                      | empty
-    '''
-    p[0] = p[1]
+    quad.push(var['name'], var['type'])
+    quad.checkOperator(['*', '/'])
 
 
 def p_multiply_divide(p):
@@ -205,7 +225,7 @@ def p_multiply_divide(p):
                     | DIVIDE 
 
     '''
-    p[0] = p[1]
+    quad.push(p[1], "operator")
 
 
 def p_plus_minus(p):
@@ -213,7 +233,7 @@ def p_plus_minus(p):
     plus_minus : PLUS 
                | MINUS
     '''
-    p[0] = p[1]
+    quad.push(p[1], "operator")
 
 
 def p_condition(p):
@@ -231,17 +251,22 @@ def p_condition_else(p):
 
 def p_expression(p):
     '''
-    expression : exp 
-               | exp GREATER_THAN exp 
-               | exp GREATER_THAN_EQUAL exp 
-               | exp LESS_THAN exp 
-               | exp LESS_THAN_EQUAL exp 
-               | exp NOT_EQUAL exp 
+    expression : exp
+               | STRING 
+               | exp comparison exp 
     '''
-    if (len(p) == 2):
-        p[0] = p[1]
-    else:
-        p[0] = (p[2], p[1], p[3])
+    quad.checkOperator(['>', '<', '>=', '<=', '==', '!='])
+
+
+def p_comparison(p):
+    '''
+    comparison : GREATER_THAN
+               | LESS_THAN
+               | LESS_THAN_EQUAL
+               | NOT_EQUAL
+               | EQUAL
+    '''
+    quad.push(p[1], "operator")
 
 
 def p_return(p):
@@ -252,16 +277,22 @@ def p_return(p):
 
 def p_write(p):
     '''
-    write : PRINT OPEN_PARENTHESIS write_exp CLOSE_PARENTHESIS SEMICOLON
+    write : print OPEN_PARENTHESIS write_exp CLOSE_PARENTHESIS SEMICOLON
     '''
+    quad.checkOperatorLowLevel(['print'])
+
+
+def p_print(p):
+    '''
+    print : PRINT
+    '''
+    quad.push(p[1], "operator")
 
 
 def p_write_exp(p):
     '''
     write_exp : expression
               | expression COMMA write_exp
-              | STRING
-              | STRING COMMA write_exp
     '''
 
 
@@ -271,14 +302,12 @@ def p_type(p):
          | FLOAT_ID
     '''
     table.setCurrentType(p[1])
-    p[0] = p[1]
 
 
 def p_empty(p):
     '''
     empty :
     '''
-    p[0] = None
 
 
 # Error rule for syntax errors
@@ -292,5 +321,6 @@ def parseFile(file):
 
     # Parse the file
     parser.parse(file, lexer)
-    print(table.getFunctions())
+    # print(table.getFunctions())
+    quad.print()
     table.deleteTable()
