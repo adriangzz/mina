@@ -16,7 +16,7 @@ reserved = {
 tokens = [
     'INT',
     'FLOAT',
-    'EQUAL',
+    'EQUAL_ASSIGN',
     'PLUS',
     'MINUS',
     'MULTIPLY',
@@ -30,6 +30,7 @@ tokens = [
     'GREATER_THAN',
     'GREATER_THAN_EQUAL',
     'NOT_EQUAL',
+    'EQUAL',
     'SEMICOLON',
     'COLON',
     'COMMA',
@@ -47,7 +48,8 @@ t_CLOSE_BRACKET = r'\}'
 t_OPEN_PARENTHESIS = r'\('
 t_CLOSE_PARENTHESIS = r'\)'
 
-t_EQUAL = r'\='
+t_EQUAL = r'\=='
+t_EQUAL_ASSIGN = r'\='
 t_LESS_THAN = r'\<'
 t_LESS_THAN_EQUAL = r'\<='
 t_GREATER_THAN = r'\>'
