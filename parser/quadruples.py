@@ -122,3 +122,10 @@ class Quadruples(object):
         print(self.stackOperands)
         print(self.stackOperators)
         print(self.stackQuads)
+
+    def printQuad(self) -> None:
+        '''
+        Prints the quadruples nicely
+        '''
+        for i, q in enumerate(self.stackQuads):
+            print(f'{i + 1}. {q}')
