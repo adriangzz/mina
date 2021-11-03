@@ -33,9 +33,7 @@ class Quadruples(object):
         if len(self.stackOperators) > 0:
             operator = self.stackOperators[-1]
 
-            if operator == 'print':
-                self.createQuadPrint(operator)
-            elif operator in l:
+            if operator in l:
                 self.createQuadLowLevel(operator)
 
     def createQuad(self, operator: str) -> None:
