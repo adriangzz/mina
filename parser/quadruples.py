@@ -26,7 +26,8 @@ class Quadruples(object):
             elif operator == ')':
                 self.stackOperators.pop()
                 self.stackOperators.pop()
-                self.checkOperatorMultDiv()
+                self.checkOperator(['*', '/'])
+                self.checkOperator(['+', '-'])
 
     def checkOperatorLowLevel(self, l: list):
         if len(self.stackOperators) > 0:
