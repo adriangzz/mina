@@ -124,7 +124,7 @@ class FunctionTable(object):
         '''
         if name in self.functionNameMap[self.currFunction]['variables']:
             return self.functionNameMap[self.currFunction]['variables'][name]
-        elif name in self.functionNameMap[self.programName]['variables'][name]:
+        elif name in self.functionNameMap[self.programName]['variables']:
             return self.functionNameMap[self.programName]['variables'][name]
         print(
             f'Error: variable {name} not declared in scope or global variables')
