@@ -189,6 +189,7 @@ def p_var_cte(p):
     '''
     var_cte : int 
             | float
+            | string
     '''
     quad.checkOperator(['*', '/'])
 
@@ -205,6 +206,13 @@ def p_float(p):
     float : FLOAT
     '''
     quad.push(p[1], "float")
+
+
+def p_string(p):
+    '''
+    string : STRING
+    '''
+    quad.push(p[1], "string")
 
 
 def p_var_cte_ID(p):
@@ -342,6 +350,7 @@ def p_type(p):
     type : INT_ID
          | FLOAT_ID
          | BOOL_ID
+         | STRING_ID
     '''
     table.setCurrentType(p[1])
 

@@ -275,5 +275,5 @@ class SemanticCube(object):
                     if ans != 'err':
                         return ans
 
-        print(f'Error: semantic not recognized {leftOp} {rightOp} {symb}')
+        print(f'Error: semantic not recognized {leftOp} {symb} {rightOp}')
         raise SyntaxError

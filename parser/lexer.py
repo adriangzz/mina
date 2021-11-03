@@ -10,6 +10,7 @@ reserved = {
     'float': 'FLOAT_ID',
     'int': 'INT_ID',
     'bool': 'BOOL_ID',
+    'string': 'STRING_ID',
     'function': 'FUNCTION_ID',
     'return': 'RETURN_ID',
     'main': 'MAIN_ID',
