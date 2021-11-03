@@ -164,6 +164,12 @@ class SemanticCube(object):
                     "<": "err",
                     "=": "err",
                 },
+                "bool": {
+                    "+": "err",
+                    "/": "err",
+                    "<": "err",
+                    "=": "err",
+                },
 
             },
             "float": {
@@ -180,6 +186,12 @@ class SemanticCube(object):
                     "=": "float",
                 },
                 "char": {
+                    "+": "err",
+                    "/": "err",
+                    "<": "err",
+                    "=": "err",
+                },
+                "bool": {
                     "+": "err",
                     "/": "err",
                     "<": "err",
@@ -206,6 +218,39 @@ class SemanticCube(object):
                     "<": "err",
                     "=": "char",
                 },
+                "bool": {
+                    "+": "err",
+                    "/": "err",
+                    "<": "err",
+                    "=": "err",
+                },
+
+            },
+            "bool": {
+                "int": {
+                    "+": "err",
+                    "/": "err",
+                    "<": "err",
+                    "=": "bool",
+                },
+                "float": {
+                    "+": "err",
+                    "/": "err",
+                    "<": "err",
+                    "=": "bool",
+                },
+                "char": {
+                    "+": "err",
+                    "/": "err",
+                    "<": "err",
+                    "=": "err",
+                },
+                "bool": {
+                    "+": "err",
+                    "/": "err",
+                    "<": "err",
+                    "=": "bool",
+                },
 
             },
         }
@@ -230,5 +275,5 @@ class SemanticCube(object):
                     if ans != 'err':
                         return ans
 
-        print(f'Error: semantic not recognized')
+        print(f'Error: semantic not recognized {leftOp} {rightOp} {symb}')
         raise SyntaxError

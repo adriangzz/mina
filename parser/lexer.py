@@ -8,6 +8,7 @@ reserved = {
     'var': 'VAR_ID',
     'float': 'FLOAT_ID',
     'int': 'INT_ID',
+    'bool': 'BOOL_ID',
     'function': 'FUNCTION_ID',
     'return': 'RETURN_ID',
     'main': 'MAIN_ID',

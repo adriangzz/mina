@@ -300,6 +300,7 @@ def p_type(p):
     '''
     type : INT_ID
          | FLOAT_ID
+         | BOOL_ID
     '''
     table.setCurrentType(p[1])
 
