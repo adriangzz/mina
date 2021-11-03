@@ -239,8 +239,22 @@ def p_plus_minus(p):
 
 def p_condition(p):
     '''
-    condition : IF OPEN_PARENTHESIS expression CLOSE_PARENTHESIS block else SEMICOLON
+    condition : IF OPEN_PARENTHESIS expression close_parenthesis block_condition else
     '''
+
+
+def p_close_parenthesis(p):
+    '''
+    close_parenthesis : CLOSE_PARENTHESIS
+    '''
+    quad.createQuadGoTo('GOTOF')
+
+
+def p_block_condition(p):
+    '''
+    block_condition : block
+    '''
+    quad.updateQuadGoTo()
 
 
 def p_condition_else(p):

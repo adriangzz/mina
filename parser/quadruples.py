@@ -10,6 +10,7 @@ class Quadruples(object):
         self.stackQuads = []
         self.cube = SemanticCube()
         self.count = 1
+        self.goTo = []
 
     def push(self, o: str, type: str) -> None:
         if type == 'operator':
@@ -22,7 +23,7 @@ class Quadruples(object):
             operator = self.stackOperators[-1]
 
             if operator in l:
-                self.createQuad(operator)
+                self.createQuad(operator, False)
             elif operator == ')':
                 self.stackOperators.pop()
                 self.stackOperators.pop()
@@ -34,9 +35,9 @@ class Quadruples(object):
             operator = self.stackOperators[-1]
 
             if operator in l:
-                self.createQuadLowLevel(operator)
+                self.createQuad(operator, True)
 
-    def createQuad(self, operator: str) -> None:
+    def createQuad(self, operator: str, isLowLevel: bool) -> None:
         self.stackOperators.pop()
         rightOperandTuple = self.stackOperands.pop()
         leftOperandTuple = self.stackOperands.pop()
@@ -49,29 +50,15 @@ class Quadruples(object):
         resultType = self.cube.getResult(
             leftOperandType, rightOperandType, operator)
 
-        temp = 't' + str(self.count)
-
-        self.stackQuads.append(
-            (operator, leftOperand, rightOperand, temp))
-        self.stackOperands.append((temp, resultType))
-
-        self.count += 1
-
-    def createQuadLowLevel(self, operator: str) -> None:
-        self.stackOperators.pop()
-        rightOperandTuple = self.stackOperands.pop()
-        leftOperandTuple = self.stackOperands.pop()
-
-        rightOperand = rightOperandTuple[0]
-        rightOperandType = rightOperandTuple[1]
-        leftOperand = leftOperandTuple[0]
-        leftOperandType = leftOperandTuple[1]
-
-        self.cube.getResult(
-            leftOperandType, rightOperandType, operator)
-
-        self.stackQuads.append(
-            (operator, rightOperand, None, leftOperand))
+        if not isLowLevel:
+            temp = 't' + str(self.count)
+            self.stackOperands.append((temp, resultType))
+            self.stackQuads.append(
+                (operator, leftOperand, rightOperand, temp))
+            self.count += 1
+        else:
+            self.stackQuads.append(
+                (operator, rightOperand, None, leftOperand))
 
     def createQuadReadWrite(self, type: str) -> None:
         rightOperandTuple = self.stackOperands.pop()
@@ -80,6 +67,25 @@ class Quadruples(object):
 
         self.stackQuads.append(
             (type, None, None, rightOperand))
+
+    def createQuadGoTo(self, type: str) -> None:
+        rightOperandTuple = self.stackOperands.pop()
+
+        rightOperand = rightOperandTuple[0]
+
+        self.stackQuads.append(
+            (type, None, rightOperand, None))
+
+        self.goTo.append(len(self.stackQuads) - 1)
+
+    def updateQuadGoTo(self) -> None:
+        prevGoTo = self.goTo.pop()
+
+        tupleList = list(self.stackQuads[prevGoTo])
+        tupleList[3] = len(self.stackQuads) + 1
+        updatedTuple = tuple(tupleList)
+
+        self.stackQuads[prevGoTo] = updatedTuple
 
     def print(self) -> None:
         print(self.stackOperands)
