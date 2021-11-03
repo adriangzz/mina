@@ -51,7 +51,7 @@ class Quadruples(object):
         resultType = self.cube.getResult(
             leftOperandType, rightOperandType, operator)
 
-        temp = "t" + str(self.count)
+        temp = 't' + str(self.count)
 
         self.stackQuads.append(
             (operator, leftOperand, rightOperand, temp))
@@ -75,14 +75,13 @@ class Quadruples(object):
         self.stackQuads.append(
             (operator, rightOperand, None, leftOperand))
 
-    def createQuadPrint(self, operator: str) -> None:
-        self.stackOperators.pop()
+    def createQuadPrint(self) -> None:
         rightOperandTuple = self.stackOperands.pop()
 
         rightOperand = rightOperandTuple[0]
 
         self.stackQuads.append(
-            (operator, None, None, rightOperand))
+            ('print', None, None, rightOperand))
 
     def print(self) -> None:
         print(self.stackOperands)

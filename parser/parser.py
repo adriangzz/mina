@@ -284,23 +284,22 @@ def p_return(p):
 
 def p_write(p):
     '''
-    write : print OPEN_PARENTHESIS write_exp CLOSE_PARENTHESIS SEMICOLON
+    write : PRINT OPEN_PARENTHESIS write_exp CLOSE_PARENTHESIS SEMICOLON
     '''
-    quad.checkOperatorLowLevel(['print'])
-
-
-def p_print(p):
-    '''
-    print : PRINT
-    '''
-    quad.push(p[1], "operator")
 
 
 def p_write_exp(p):
     '''
-    write_exp : expression
-              | expression COMMA write_exp
+    write_exp : write_expression
+              | write_expression COMMA write_exp
     '''
+
+
+def p_write_expression(p):
+    '''
+    write_expression : expression
+    '''
+    quad.createQuadPrint()
 
 
 def p_type(p):
