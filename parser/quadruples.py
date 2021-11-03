@@ -69,25 +69,29 @@ class Quadruples(object):
             (type, None, None, rightOperand))
 
     def createQuadGoTo(self, type: str) -> None:
-        rightOperandTuple = self.stackOperands.pop()
+        if type != 'GOTO':
+            rightOperandTuple = self.stackOperands.pop()
 
-        rightOperand = rightOperandTuple[0]
-        rightOperandType = rightOperandTuple[1]
+            rightOperand = rightOperandTuple[0]
+            rightOperandType = rightOperandTuple[1]
 
-        if rightOperandType != 'bool' and rightOperandType != 'int' and rightOperandType != 'float':
-            print("ERROR: condition must be of type bool, int or float")
-            raise SyntaxError
+            if rightOperandType != 'bool' and rightOperandType != 'int' and rightOperandType != 'float':
+                print("ERROR: condition must be of type bool, int or float")
+                raise SyntaxError
 
-        self.stackQuads.append(
-            (type, None, rightOperand, None))
+            self.stackQuads.append(
+                (type, None, rightOperand, None))
+        else:
+            self.stackQuads.append(
+                (type, None, None, None))
 
         self.goTo.append(len(self.stackQuads) - 1)
 
-    def updateQuadGoTo(self) -> None:
+    def updateQuadGoTo(self, extra: int = 0) -> None:
         prevGoTo = self.goTo.pop()
 
         tupleList = list(self.stackQuads[prevGoTo])
-        tupleList[3] = len(self.stackQuads) + 1
+        tupleList[3] = len(self.stackQuads) + 1 + extra
         updatedTuple = tuple(tupleList)
 
         self.stackQuads[prevGoTo] = updatedTuple
