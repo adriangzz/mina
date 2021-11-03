@@ -158,7 +158,7 @@ class SemanticCube(object):
                     "<": "bool",
                     "=": "int",
                 },
-                "char": {
+                "string": {
                     "+": "err",
                     "/": "err",
                     "<": "err",
@@ -185,7 +185,7 @@ class SemanticCube(object):
                     "<": "bool",
                     "=": "float",
                 },
-                "char": {
+                "string": {
                     "+": "err",
                     "/": "err",
                     "<": "err",
@@ -199,7 +199,7 @@ class SemanticCube(object):
                 },
 
             },
-            "char": {
+            "string": {
                 "int": {
                     "+": "err",
                     "/": "err",
@@ -212,11 +212,11 @@ class SemanticCube(object):
                     "<": "err",
                     "=": "err",
                 },
-                "char": {
+                "string": {
                     "+": "err",
                     "/": "err",
                     "<": "err",
-                    "=": "char",
+                    "=": "string",
                 },
                 "bool": {
                     "+": "err",
@@ -239,7 +239,7 @@ class SemanticCube(object):
                     "<": "err",
                     "=": "bool",
                 },
-                "char": {
+                "string": {
                     "+": "err",
                     "/": "err",
                     "<": "err",

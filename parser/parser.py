@@ -252,10 +252,17 @@ def p_condition_else(p):
 def p_expression(p):
     '''
     expression : exp
-               | STRING 
+               | string 
                | exp comparison exp 
     '''
     quad.checkOperator(['>', '<', '>=', '<=', '==', '!='])
+
+
+def p_string(p):
+    '''
+    string : STRING
+    '''
+    quad.push(p[1], 'string')
 
 
 def p_comparison(p):
