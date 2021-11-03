@@ -72,6 +72,11 @@ class Quadruples(object):
         rightOperandTuple = self.stackOperands.pop()
 
         rightOperand = rightOperandTuple[0]
+        rightOperandType = rightOperandTuple[1]
+
+        if rightOperandType != 'bool' and rightOperandType != 'int' and rightOperandType != 'float':
+            print("ERROR: condition must be of type bool, int or float")
+            raise SyntaxError
 
         self.stackQuads.append(
             (type, None, rightOperand, None))
