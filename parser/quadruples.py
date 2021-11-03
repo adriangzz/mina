@@ -3,6 +3,9 @@ from parser.variable_semantics import SemanticCube
 
 
 class Quadruples(object):
+    '''
+    Class to create quadruples that will later be delivered to the virtual machine.
+    '''
 
     def __init__(self) -> None:
         self.stackOperands = []
@@ -11,33 +14,45 @@ class Quadruples(object):
         self.cube = SemanticCube()
         self.count = 1
         self.goTo = []
+        self.quadCounter = 1
 
     def push(self, o: str, type: str) -> None:
+        '''
+        Pushes operators or operands to their stack.
+        '''
         if type == 'operator':
             self.stackOperators.append(o)
         else:
             self.stackOperands.append((o, type))
 
-    def checkOperator(self, l: list) -> None:
+    def checkOperator(self, l: list, isLowLevel: bool) -> None:
+        '''
+        Check if operator exists in the given list, also checks if there is an end of bracket.
+        If this conditions are met, createQuad method is called.
+        '''
         if len(self.stackOperators) > 0:
             operator = self.stackOperators[-1]
 
             if operator in l:
-                self.createQuad(operator, False)
+                self.createQuad(operator, isLowLevel)
             elif operator == ')':
                 self.stackOperators.pop()
                 self.stackOperators.pop()
                 self.checkOperator(['*', '/'])
                 self.checkOperator(['+', '-'])
 
-    def checkOperatorLowLevel(self, l: list):
-        if len(self.stackOperators) > 0:
-            operator = self.stackOperators[-1]
-
-            if operator in l:
-                self.createQuad(operator, True)
+    def appendQuad(self, o: str, l: any, r: any, res: any):
+        '''
+        Appends a tuple of the given parameters to the quads list and adds 1 to the quad counter.
+        '''
+        self.stackQuads.append(
+            (o, l, r, res))
+        self.quadCounter += 1
 
     def createQuad(self, operator: str, isLowLevel: bool) -> None:
+        '''
+        Creates a quadruple given the operator.
+        '''
         self.stackOperators.pop()
         rightOperandTuple = self.stackOperands.pop()
         leftOperandTuple = self.stackOperands.pop()
@@ -53,22 +68,25 @@ class Quadruples(object):
         if not isLowLevel:
             temp = 't' + str(self.count)
             self.stackOperands.append((temp, resultType))
-            self.stackQuads.append(
-                (operator, leftOperand, rightOperand, temp))
+            self.appendQuad(operator, leftOperand, rightOperand, temp)
             self.count += 1
         else:
-            self.stackQuads.append(
-                (operator, rightOperand, None, leftOperand))
+            self.appendQuad(operator, rightOperand, None, leftOperand)
 
     def createQuadReadWrite(self, type: str) -> None:
+        '''
+        Creates a quadruple for the print and read type.
+        '''
         rightOperandTuple = self.stackOperands.pop()
 
         rightOperand = rightOperandTuple[0]
 
-        self.stackQuads.append(
-            (type, None, None, rightOperand))
+        self.appendQuad(type, None, None, rightOperand)
 
     def createQuadGoTo(self, type: str) -> None:
+        '''
+        Creates a quadruple for the goto type.
+        '''
         if type != 'GOTO':
             rightOperandTuple = self.stackOperands.pop()
 
@@ -79,24 +97,28 @@ class Quadruples(object):
                 print("ERROR: condition must be of type bool, int or float")
                 raise SyntaxError
 
-            self.stackQuads.append(
-                (type, None, rightOperand, None))
+            self.appendQuad(type, None, rightOperand, None)
         else:
-            self.stackQuads.append(
-                (type, None, None, None))
+            self.appendQuad(type, None, None, None)
 
         self.goTo.append(len(self.stackQuads) - 1)
 
     def updateQuadGoTo(self, extra: int = 0) -> None:
+        '''
+        Gets the last go to in the stack and updates the counter in it with the global quad counter.
+        '''
         prevGoTo = self.goTo.pop()
 
         tupleList = list(self.stackQuads[prevGoTo])
-        tupleList[3] = len(self.stackQuads) + 1 + extra
+        tupleList[3] = self.quadCounter + extra
         updatedTuple = tuple(tupleList)
 
         self.stackQuads[prevGoTo] = updatedTuple
 
     def print(self) -> None:
+        '''
+        Prints all the lists
+        '''
         print(self.stackOperands)
         print(self.stackOperators)
         print(self.stackQuads)

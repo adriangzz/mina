@@ -104,7 +104,7 @@ def p_id_arr(p):
     var = table.getVariable(varName)
 
     quad.push(var['name'], var['type'])
-    quad.checkOperator(['*', '/'])
+    quad.checkOperator(['*', '/'], False)
 
 
 def p_functions(p):
@@ -138,7 +138,7 @@ def p_assign(p):
     '''
     assign : id_arr equal_assign expression SEMICOLON
     '''
-    quad.checkOperatorLowLevel(['='])
+    quad.checkOperator(['='], True)
 
 
 def p_equal_assign(p):
@@ -160,7 +160,7 @@ def p_term(p):
     term : factor 
          | factor multiply_divide term
     '''
-    quad.checkOperator(['+', '-'])
+    quad.checkOperator(['+', '-'], False)
 
 
 def p_factor(p):
@@ -191,7 +191,7 @@ def p_var_cte(p):
             | float
             | string
     '''
-    quad.checkOperator(['*', '/'])
+    quad.checkOperator(['*', '/'], False)
 
 
 def p_int(p):
@@ -225,7 +225,7 @@ def p_var_cte_ID(p):
     var = table.getVariable(varName)
 
     quad.push(var['name'], var['type'])
-    quad.checkOperator(['*', '/'])
+    quad.checkOperator(['*', '/'], False)
 
 
 def p_multiply_divide(p):
@@ -286,7 +286,7 @@ def p_expression(p):
                | string 
                | exp comparison exp 
     '''
-    quad.checkOperator(['>', '<', '>=', '<=', '==', '!='])
+    quad.checkOperator(['>', '<', '>=', '<=', '==', '!='], False)
 
 
 def p_string(p):
