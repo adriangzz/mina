@@ -252,7 +252,7 @@ def p_condition(p):
     quad.updateQuadGoTo()
 
 
-def p_condition(p):
+def p_condition_with_else(p):
     '''
     condition : IF OPEN_PARENTHESIS expression close_parenthesis block_condition else
     '''
@@ -381,5 +381,5 @@ def parseFile(file):
     # Parse the file
     parser.parse(file, lexer)
     # print(table.getFunctions())
-    quad.print()
+    quad.printQuad()
     table.deleteTable()
