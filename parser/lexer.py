@@ -4,6 +4,7 @@ reserved = {
     'if': 'IF',
     'else': 'ELSE',
     'print': 'PRINT',
+    'read': 'READ',
     'program': 'PROGRAM_ID',
     'var': 'VAR_ID',
     'float': 'FLOAT_ID',

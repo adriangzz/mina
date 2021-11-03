@@ -75,13 +75,13 @@ class Quadruples(object):
         self.stackQuads.append(
             (operator, rightOperand, None, leftOperand))
 
-    def createQuadPrint(self) -> None:
+    def createQuadReadWrite(self, type: str) -> None:
         rightOperandTuple = self.stackOperands.pop()
 
         rightOperand = rightOperandTuple[0]
 
         self.stackQuads.append(
-            ('print', None, None, rightOperand))
+            (type, None, None, rightOperand))
 
     def print(self) -> None:
         print(self.stackOperands)

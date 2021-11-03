@@ -60,6 +60,7 @@ def p_statue(p):
     statue : vars
            | assign
            | condition
+           | read
            | write
            | return
     '''
@@ -288,6 +289,26 @@ def p_write(p):
     '''
 
 
+def p_read(p):
+    '''
+    read : READ OPEN_PARENTHESIS read_exp CLOSE_PARENTHESIS SEMICOLON
+    '''
+
+
+def p_read_exp(p):
+    '''
+    read_exp : read_expression
+             | read_expression COMMA read_exp
+    '''
+
+
+def p_read_expression(p):
+    '''
+    read_expression : id_arr
+    '''
+    quad.createQuadReadWrite('read')
+
+
 def p_write_exp(p):
     '''
     write_exp : write_expression
@@ -299,7 +320,7 @@ def p_write_expression(p):
     '''
     write_expression : expression
     '''
-    quad.createQuadPrint()
+    quad.createQuadReadWrite('print')
 
 
 def p_type(p):
