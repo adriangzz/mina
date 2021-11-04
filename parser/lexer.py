@@ -12,7 +12,7 @@ reserved = {
     'float': 'FLOAT_ID',
     'int': 'INT_ID',
     'bool': 'BOOL_ID',
-    'string': 'STRING_ID',
+    'char': 'CHAR_ID',
     'function': 'FUNCTION_ID',
     'return': 'RETURN_ID',
     'main': 'MAIN_ID',
@@ -40,6 +40,7 @@ tokens = [
     'COLON',
     'COMMA',
     'STRING',
+    'CHAR',
     'ARRAY',
     'ID',
 ] + list(reserved.values())
@@ -67,6 +68,7 @@ t_MULTIPLY = r'\*'
 t_DIVIDE = r'\/'
 
 t_STRING = r'"([^"]|\\")*"'
+t_CHAR = r'\'.\''
 
 
 def t_FLOAT(t):
