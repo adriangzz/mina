@@ -61,6 +61,7 @@ def p_statue(p):
            | assign
            | condition
            | while_condition
+           | do_while_condition
            | read
            | write
            | return
@@ -272,11 +273,31 @@ def p_while(p):
     quad.appendGoTo(2)
 
 
+def p_do_while_condition(p):
+    '''
+    do_while_condition : do block WHILE OPEN_PARENTHESIS expression close_parenthesis_do
+    '''
+
+
+def p_do(p):
+    '''
+    do : DO
+    '''
+    quad.appendGoTo(0)
+
+
 def p_close_parenthesis(p):
     '''
     close_parenthesis : CLOSE_PARENTHESIS
     '''
     quad.createQuadGoTo('GOTOF')
+
+
+def p_close_parenthesis_do(p):
+    '''
+    close_parenthesis_do : CLOSE_PARENTHESIS
+    '''
+    quad.createQuadGoTo('GOTOT', True)
 
 
 def p_block_condition(p):

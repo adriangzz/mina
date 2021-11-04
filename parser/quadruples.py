@@ -50,6 +50,9 @@ class Quadruples(object):
         self.quadCounter += 1
 
     def appendGoTo(self, counter: int) -> None:
+        '''
+        Appends a counter to the go to stack.
+        '''
         self.goTo.append(self.quadCounter - counter)
 
     def createQuad(self, operator: str, isLowLevel: bool) -> None:
@@ -86,7 +89,7 @@ class Quadruples(object):
 
         self.appendQuad(type, None, None, rightOperand)
 
-    def createQuadGoTo(self, type: str) -> None:
+    def createQuadGoTo(self, type: str, appendCounter: bool = False) -> None:
         '''
         Creates a quadruple for the goto type.
         '''
@@ -100,7 +103,11 @@ class Quadruples(object):
                 print("ERROR: condition must be of type bool, int or float")
                 raise SyntaxError
 
-            self.appendQuad(type, None, rightOperand, None)
+            if appendCounter:
+                prevGoTo = self.goTo.pop()
+                self.appendQuad(type, None, rightOperand, prevGoTo)
+            else:
+                self.appendQuad(type, None, rightOperand, None)
         else:
             self.appendQuad(type, None, None, None)
 
