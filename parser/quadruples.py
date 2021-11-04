@@ -108,10 +108,10 @@ class Quadruples(object):
                 self.appendQuad(type, None, rightOperand, prevGoTo)
             else:
                 self.appendQuad(type, None, rightOperand, None)
+                self.appendGoTo(2)
         else:
             self.appendQuad(type, None, None, None)
-
-        self.appendGoTo(2)
+            self.appendGoTo(2)
 
     def updateQuadGoTo(self, extra: int = 0) -> None:
         '''
@@ -132,7 +132,7 @@ class Quadruples(object):
         prevGoToFalse = self.goTo.pop()
         prevGoToReturn = self.goTo.pop()
 
-        self.appendQuad('GOTO', None, None, prevGoToReturn + 2)
+        self.appendQuad('GOTO', None, None, prevGoToReturn + 1)
 
         # Update goto with counter
         tupleList = list(self.stackQuads[prevGoToFalse])

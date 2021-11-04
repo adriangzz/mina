@@ -249,20 +249,20 @@ def p_plus_minus(p):
 
 def p_condition(p):
     '''
-    condition : IF OPEN_PARENTHESIS expression close_parenthesis block
+    condition : IF OPEN_PARENTHESIS expression close_parenthesis_condition block
     '''
     quad.updateQuadGoTo()
 
 
 def p_condition_with_else(p):
     '''
-    condition : IF OPEN_PARENTHESIS expression close_parenthesis block_condition else
+    condition : IF OPEN_PARENTHESIS expression close_parenthesis_condition block_condition else
     '''
 
 
 def p_while_condition(p):
     '''
-    while_condition : while OPEN_PARENTHESIS expression close_parenthesis block_condition_while
+    while_condition : while OPEN_PARENTHESIS expression close_parenthesis_condition block_condition_while
     '''
 
 
@@ -270,7 +270,7 @@ def p_while(p):
     '''
     while : WHILE
     '''
-    quad.appendGoTo(2)
+    quad.appendGoTo(1)
 
 
 def p_do_while_condition(p):
@@ -286,11 +286,12 @@ def p_do(p):
     quad.appendGoTo(0)
 
 
-def p_close_parenthesis(p):
+def p_close_parenthesis_condition(p):
     '''
-    close_parenthesis : CLOSE_PARENTHESIS
+    close_parenthesis_condition : CLOSE_PARENTHESIS
     '''
-    quad.createQuadGoTo('GOTOF')
+    quad.createQuadGoTo(
+        'GOTOF', False)
 
 
 def p_close_parenthesis_do(p):
@@ -305,14 +306,14 @@ def p_block_condition(p):
     block_condition : block
     '''
     quad.updateQuadGoTo(1)
-    quad.createQuadGoTo('GOTO')
+    quad.createQuadGoTo('GOTO', False)
 
 
 def p_block_condition_while(p):
     '''
     block_condition_while : block
     '''
-    quad.updateQuadGoToWhile()
+    quad.updateQuadGoToWhile(0)
 
 
 def p_condition_else(p):
