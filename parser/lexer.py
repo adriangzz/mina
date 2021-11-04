@@ -3,6 +3,7 @@ from lib import lex
 reserved = {
     'if': 'IF',
     'else': 'ELSE',
+    'while': 'WHILE',
     'print': 'PRINT',
     'read': 'READ',
     'program': 'PROGRAM_ID',

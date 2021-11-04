@@ -41,13 +41,16 @@ class Quadruples(object):
                 self.checkOperator(['*', '/'])
                 self.checkOperator(['+', '-'])
 
-    def appendQuad(self, o: str, l: any, r: any, res: any):
+    def appendQuad(self, o: str, l: any, r: any, res: any) -> None:
         '''
         Appends a tuple of the given parameters to the quads list and adds 1 to the quad counter.
         '''
         self.stackQuads.append(
             (o, l, r, res))
         self.quadCounter += 1
+
+    def appendGoTo(self, counter: int) -> None:
+        self.goTo.append(self.quadCounter - counter)
 
     def createQuad(self, operator: str, isLowLevel: bool) -> None:
         '''
@@ -101,7 +104,7 @@ class Quadruples(object):
         else:
             self.appendQuad(type, None, None, None)
 
-        self.goTo.append(len(self.stackQuads) - 1)
+        self.appendGoTo(2)
 
     def updateQuadGoTo(self, extra: int = 0) -> None:
         '''
@@ -109,11 +112,26 @@ class Quadruples(object):
         '''
         prevGoTo = self.goTo.pop()
 
+        # Update goto with counter
         tupleList = list(self.stackQuads[prevGoTo])
         tupleList[3] = self.quadCounter + extra
         updatedTuple = tuple(tupleList)
-
         self.stackQuads[prevGoTo] = updatedTuple
+
+    def updateQuadGoToWhile(self, extra: int = 0) -> None:
+        '''
+        Gets the last two go to's in the stack and updates the gotof and adds a new goto.
+        '''
+        prevGoToFalse = self.goTo.pop()
+        prevGoToReturn = self.goTo.pop()
+
+        self.appendQuad('GOTO', None, None, prevGoToReturn + 2)
+
+        # Update goto with counter
+        tupleList = list(self.stackQuads[prevGoToFalse])
+        tupleList[3] = self.quadCounter + extra
+        updatedTuple = tuple(tupleList)
+        self.stackQuads[prevGoToFalse] = updatedTuple
 
     def print(self) -> None:
         '''
