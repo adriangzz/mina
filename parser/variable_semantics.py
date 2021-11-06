@@ -1,3 +1,6 @@
+from parser.variable_address import VariablesAddress
+
+
 class FunctionTable(object):
     '''
     Class to keep variable semantics.
@@ -9,11 +12,13 @@ class FunctionTable(object):
 
     def __init__(self) -> None:
         self.functionNameMap = {}
+        self.constantTable = {}
         self.currFunction = ''
+        self.currFunctionType = ''
         self.programName = ''
         self.currType = ''
 
-    def addFunction(self, row: dict) -> None:
+    def addFunction(self, row: dict, type: str) -> None:
         '''
         Checks name of function does not exist, then adds it to the dictionary using it's name as key.
         Sets current function as this function.
@@ -22,6 +27,7 @@ class FunctionTable(object):
         if row['name'] not in self.functionNameMap:
             self.functionNameMap[row['name']] = row
             self.currFunction = row['name']
+            self.currFunctionType = type
         else:
             print("Error: function name already in use")
             raise SyntaxError
@@ -66,15 +72,16 @@ class FunctionTable(object):
             return True
         return False
 
-    def deleteFunctionVariables(self, name: str) -> bool:
+    def deleteFunctionVariables(self, name: str) -> None:
         '''
         Deletes function given the name.
         Returns true if deleted, false otherwise.
         '''
         if name in self.functionNameMap:
             self.functionNameMap[name].pop('variables')
-            return True
-        return False
+        else:
+            print(f'Error: function {name} not declared')
+            raise SyntaxError
 
     def functionExists(self, name: str) -> bool:
         '''
@@ -82,17 +89,24 @@ class FunctionTable(object):
         '''
         return name in self.functionNameMap
 
-    def setCurrentFunction(self, name: str) -> None:
+    def setCurrentFunction(self, name: str, scope: str) -> None:
         '''
         Sets current function.
         '''
         self.currFunction = name
+        self.currFunctionType = scope
 
     def getCurrentFunction(self) -> str:
         '''
         Gets current function.
         '''
         return self.currFunction
+
+    def getCurrentFunctionType(self) -> str:
+        '''
+        Gets current function.
+        '''
+        return self.currFunctionType
 
     def getCurrentType(self) -> str:
         '''
@@ -135,6 +149,24 @@ class FunctionTable(object):
         Deletes table.
         '''
         del self.functionNameMap
+
+    def isConstant(self, cons: any) -> bool:
+        '''
+        Check if constant exists in the table.
+        '''
+        return cons in self.constantTable
+
+    def addConstant(self, cons: any, address: int) -> None:
+        '''
+        Adds constant to table.
+        '''
+        self.constantTable[cons] = address
+
+    def getConstant(self, cons: any) -> int:
+        '''
+        Returns constant address.
+        '''
+        return self.constantTable[cons]
 
 
 class SemanticCube(object):

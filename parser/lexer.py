@@ -13,6 +13,7 @@ reserved = {
     'int': 'INT_ID',
     'bool': 'BOOL_ID',
     'char': 'CHAR_ID',
+    'void': 'VOID_ID',
     'function': 'FUNCTION_ID',
     'return': 'RETURN_ID',
     'main': 'MAIN_ID',

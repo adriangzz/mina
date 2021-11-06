@@ -1,11 +1,13 @@
 from lib import yacc
 from parser.lexer import tokens, lexer
 from parser.quadruples import Quadruples
+from parser.variable_address import VariablesAddress
 from parser.variable_semantics import FunctionTable
 import re
 
 table = FunctionTable()
-quad = Quadruples()
+variableAddress = VariablesAddress()
+quad = Quadruples(variableAddress)
 
 
 def p_expression_program(p):
@@ -19,7 +21,8 @@ def p_program_id(p):
     program_id : PROGRAM_ID ID
     '''
     table.setProgramName(p[2])
-    table.addFunction({'name': p[2], 'type': 'void', 'variables': {}})
+    table.addFunction(
+        {'name': p[2], 'type': 'void', 'variables': {}}, 'global')
 
 
 def p_vars_functions(p):
@@ -39,7 +42,7 @@ def p_main_id(p):
     '''
     main_id : MAIN_ID OPEN_PARENTHESIS CLOSE_PARENTHESIS
     '''
-    table.addFunction({'name': p[1], 'variables': {}})
+    table.addFunction({'name': p[1], 'variables': {}}, 'local')
 
 
 def p_block(p):
@@ -93,7 +96,9 @@ def p_assign_id_arr(p):
 
     # Get var name without brackets
     varName = re.findall('_?[a-zA-Z][a-zA-Z0-9]*', p[1])[0]
-    table.addVariables({'name': varName, 'type': currType})
+    address = variableAddress.getTypeStartingAddress(
+        table.getCurrentFunctionType(), currType)
+    table.addVariables({'name': varName, 'type': currType, 'address': address})
 
 
 def p_id_arr(p):
@@ -105,7 +110,7 @@ def p_id_arr(p):
     varName = re.findall('_?[a-zA-Z][a-zA-Z0-9]*', p[1])[0]
     var = table.getVariable(varName)
 
-    quad.push(var['name'], var['type'])
+    quad.push(var['address'], var['type'])
     quad.checkOperator(['*', '/'], False)
 
 
@@ -115,16 +120,17 @@ def p_functions(p):
               | empty
     '''
     if len(p) > 2:
-        # Delete function table after finishing parsing
+        # Delete function table after finishing parsing and reset local variable address
         table.deleteFunctionVariables(table.getCurrentFunction())
-        table.setCurrentFunction(table.getProgramName())
+        variableAddress.resetScope(table.getCurrentFunctionType())
+        table.setCurrentFunction(table.getProgramName(), 'global')
 
 
 def p_functions_id(p):
     '''
     functions_id : FUNCTION_ID type ID
     '''
-    table.addFunction({'name': p[3], 'type': p[2], 'variables': {}})
+    table.addFunction({'name': p[3], 'type': p[2], 'variables': {}}, 'local')
 
 
 def p_parameters(p):
@@ -201,28 +207,52 @@ def p_int(p):
     '''
     int : INT
     '''
-    quad.push(p[1], "int")
+    if table.isConstant(p[1]):
+        address = table.getConstant(p[1])
+        quad.push(address, 'int')
+    else:
+        address = variableAddress.getTypeStartingAddress('constant', 'int')
+        table.addConstant(p[1], address)
+        quad.push(address, 'int')
 
 
 def p_float(p):
     '''
     float : FLOAT
     '''
-    quad.push(p[1], "float")
+    if table.isConstant(p[1]):
+        address = table.getConstant(p[1])
+        quad.push(address, 'float')
+    else:
+        address = variableAddress.getTypeStartingAddress('constant', 'float')
+        table.addConstant(p[1], address)
+        quad.push(address, 'float')
 
 
 def p_string(p):
     '''
     string : STRING
     '''
-    quad.push(p[1], "string")
+    if table.isConstant(p[1]):
+        address = table.getConstant(p[1])
+        quad.push(address, 'string')
+    else:
+        address = variableAddress.getTypeStartingAddress('constant', 'string')
+        table.addConstant(p[1], address)
+        quad.push(address, 'string')
 
 
 def p_char(p):
     '''
     char : CHAR
     '''
-    quad.push(p[1], "char")
+    if table.isConstant(p[1]):
+        address = table.getConstant(p[1])
+        quad.push(address, 'char')
+    else:
+        address = variableAddress.getTypeStartingAddress('constant', 'char')
+        table.addConstant(p[1], address)
+        quad.push(address, 'char')
 
 
 def p_var_cte_ID(p):
@@ -234,7 +264,7 @@ def p_var_cte_ID(p):
     varName = re.findall('_?[a-zA-Z][a-zA-Z0-9]*', p[1])[0]
     var = table.getVariable(varName)
 
-    quad.push(var['name'], var['type'])
+    quad.push(var['address'], var['type'])
     quad.checkOperator(['*', '/'], False)
 
 
@@ -410,6 +440,7 @@ def p_type(p):
          | FLOAT_ID
          | BOOL_ID
          | CHAR_ID
+         | VOID_ID
     '''
     table.setCurrentType(p[1])
 
@@ -431,6 +462,6 @@ def parseFile(file):
 
     # Parse the file
     parser.parse(file, lexer)
-    # print(table.getFunctions())
+    print(table.getFunctions())
     quad.printQuad()
     table.deleteTable()

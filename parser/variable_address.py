@@ -1,3 +1,6 @@
+from copy import deepcopy
+
+
 class VariablesAddress(object):
     '''
     Class to keep addresses of variables.
@@ -5,19 +8,19 @@ class VariablesAddress(object):
 
     def __init__(self) -> None:
         self.addressDictDefault = {
-            'globalVariable': {
+            'global': {
                 "int": 1000,
                 "float": 4000,
                 "char": 6000,
                 "bool": 9000,
             },
-            'localVariable': {
+            'local': {
                 "int": 10000,
                 "float": 14000,
                 "char": 16000,
                 "bool": 19000,
             },
-            'temporalVariable': {
+            'temporal': {
                 "int": 20000,
                 "float": 24000,
                 "char": 26000,
@@ -31,8 +34,8 @@ class VariablesAddress(object):
             }
 
         }
-        self.addressDict = self.addressDictDefault.copy()
-        self.currentScope = 'globalVariable'
+        self.addressDict = deepcopy(self.addressDictDefault)
+        self.currentScope = 'global'
 
     def getTypeStartingAddress(self, scope: str, type: str) -> int:
         '''
@@ -49,7 +52,7 @@ class VariablesAddress(object):
         Returns the variable type and scope depending on the address given.
         '''
         lastType = 'int'
-        lastScope = 'globalVariable'
+        lastScope = 'global'
 
         for scope in self.addressDict.keys():
             for types in self.addressDict[scope].keys():
@@ -77,7 +80,7 @@ class VariablesAddress(object):
         Resets the given scope with the default values.
         '''
         if scope in self.addressDict.keys():
-            self.addressDict[scope] = self.addressDictDefault[scope].copy()
+            self.addressDict[scope] = deepcopy(self.addressDictDefault[scope])
         else:
             print(f'Error: scope name not found')
             raise SyntaxError
