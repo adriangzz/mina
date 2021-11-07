@@ -123,6 +123,7 @@ def p_functions(p):
         # Delete function table after finishing parsing and reset local variable address
         table.deleteFunctionVariables(table.getCurrentFunction())
         variableAddress.resetScope(table.getCurrentFunctionType())
+        variableAddress.resetScope('temporal')
         table.setCurrentFunction(table.getProgramName(), 'global')
 
 
