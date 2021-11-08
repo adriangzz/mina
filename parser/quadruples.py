@@ -141,6 +141,12 @@ class Quadruples(object):
         updatedTuple = tuple(tupleList)
         self.stackQuads[prevGoToFalse] = updatedTuple
 
+    def getQuadCounter(self) -> int:
+        '''
+        Returns the current quad counter
+        '''
+        return self.quadCounter
+
     def print(self) -> None:
         '''
         Prints all the lists

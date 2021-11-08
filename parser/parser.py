@@ -131,7 +131,9 @@ def p_functions_id(p):
     '''
     functions_id : FUNCTION_ID type ID
     '''
-    table.addFunction({'name': p[3], 'type': p[2], 'variables': {}}, 'local')
+    initAddress = quad.getQuadCounter()
+    table.addFunction(
+        {'name': p[3], 'type': p[2], 'address': initAddress, 'variables': {}}, 'local')
 
 
 def p_parameters(p):
@@ -444,6 +446,7 @@ def p_type(p):
          | VOID_ID
     '''
     table.setCurrentType(p[1])
+    p[0] = p[1]
 
 
 def p_empty(p):
