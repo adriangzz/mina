@@ -393,8 +393,15 @@ def p_comparison(p):
 
 def p_return(p):
     '''
-    return : RETURN_ID expression SEMICOLON
+    return : RETURN_ID return_expression SEMICOLON
     '''
+
+
+def p_return_expression(p):
+    '''
+    return_expression : expression
+    '''
+    quad.createQuadReadWriteReturn('return')
 
 
 def p_write(p):
@@ -420,7 +427,7 @@ def p_read_expression(p):
     '''
     read_expression : id_arr
     '''
-    quad.createQuadReadWrite('read')
+    quad.createQuadReadWriteReturn('read')
 
 
 def p_write_exp(p):
@@ -434,7 +441,7 @@ def p_write_expression(p):
     '''
     write_expression : expression
     '''
-    quad.createQuadReadWrite('print')
+    quad.createQuadReadWriteReturn('print')
 
 
 def p_type(p):

@@ -80,7 +80,7 @@ class Quadruples(object):
         else:
             self.appendQuad(operator, rightOperand, None, leftOperand)
 
-    def createQuadReadWrite(self, type: str) -> None:
+    def createQuadReadWriteReturn(self, type: str) -> None:
         '''
         Creates a quadruple for the print and read type.
         '''
