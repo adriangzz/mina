@@ -101,6 +101,22 @@ def p_assign_id_arr(p):
     table.addVariables({'name': varName, 'type': currType, 'address': address})
 
 
+def p_assign_id_arr_parameters(p):
+    '''
+    assign_id_arr_param : ID
+                        | ARRAY
+    '''
+    # Get current type
+    currType = table.getCurrentType()
+
+    # Get var name without brackets
+    varName = re.findall('_?[a-zA-Z][a-zA-Z0-9]*', p[1])[0]
+    address = variableAddress.getTypeStartingAddress(
+        table.getCurrentFunctionScope(), currType)
+    table.addVariables({'name': varName, 'type': currType, 'address': address})
+    table.addParameters(currType)
+
+
 def p_id_arr(p):
     '''
     id_arr : ID
@@ -136,14 +152,14 @@ def p_functions_id(p):
     '''
     initAddress = quad.getQuadCounter()
     table.addFunction(
-        {'name': p[3], 'type': p[2], 'address': initAddress, 'hasReturn': False, 'variables': {}}, 'local')
+        {'name': p[3], 'type': p[2], 'address': initAddress, 'hasReturn': False, 'variables': {}, 'parameters': []}, 'local')
 
 
 def p_parameters(p):
     '''
-    parameters : type assign_id_arr parameters2 
+    parameters : type assign_id_arr_param parameters2 
                | empty
-    parameters2 : COMMA type assign_id_arr parameters2
+    parameters2 : COMMA type assign_id_arr_param parameters2
                 | empty 
     '''
 

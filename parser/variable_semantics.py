@@ -47,6 +47,12 @@ class FunctionTable(object):
                   row['name'] + "' already in use")
             raise SyntaxError
 
+    def addParameters(self, type: str) -> None:
+        '''
+        Function to add parameters types to current function table.
+        '''
+        self.functionNameMap[self.currFunction]['parameters'].append(type)
+
     def getFunction(self, name: str) -> dict:
         '''
         Function that returns the dictionary of the name of function given.
