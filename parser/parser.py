@@ -124,6 +124,9 @@ def p_functions(p):
         table.deleteFunctionVariables(table.getCurrentFunction())
         variableAddress.resetScope(table.getCurrentFunctionScope())
         variableAddress.resetScope('temporal')
+
+        # Verify function has return type if not void
+        table.verifyHasReturn()
         table.setCurrentFunction(table.getProgramName(), 'global')
 
 
@@ -133,7 +136,7 @@ def p_functions_id(p):
     '''
     initAddress = quad.getQuadCounter()
     table.addFunction(
-        {'name': p[3], 'type': p[2], 'address': initAddress, 'variables': {}}, 'local')
+        {'name': p[3], 'type': p[2], 'address': initAddress, 'hasReturn': False, 'variables': {}}, 'local')
 
 
 def p_parameters(p):
@@ -402,7 +405,7 @@ def p_return_expression(p):
     return_expression : expression
     '''
     lastOperandType = quad.getLastOperandType()
-    table.verifyReturn(lastOperandType)
+    table.verifyReturnType(lastOperandType)
     quad.createQuadReadWriteReturn('return')
 
 

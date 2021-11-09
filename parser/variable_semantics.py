@@ -168,11 +168,25 @@ class FunctionTable(object):
         '''
         return self.constantTable[cons]
 
-    def verifyReturn(self, type: str) -> None:
+    def verifyReturnType(self, type: str) -> None:
+        '''
+        Verifies the return type is the same as the one expected in the function, sets has return flag as true
+        '''
         functionReturnType = self.functionNameMap[self.currFunction]['type']
         if functionReturnType != type:
             print(
                 f'ERROR: return type {type} does not match function return type {functionReturnType}')
+            raise SyntaxError
+        else:
+            self.functionNameMap[self.currFunction]['hasReturn'] = True
+
+    def verifyHasReturn(self) -> None:
+        '''
+        Verifies the function if not void, had a return statement
+        '''
+        if not self.functionNameMap[self.currFunction]['hasReturn'] and self.functionNameMap[self.currFunction]['type'] != 'void':
+            print(
+                f'ERROR: function {self.currFunction} has no return statement')
             raise SyntaxError
 
 
