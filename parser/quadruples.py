@@ -90,6 +90,12 @@ class Quadruples(object):
 
         self.appendQuad(type, None, None, rightOperand)
 
+    def createQuadEndFunc(self) -> None:
+        '''
+        Creates a quadruple for the end function.
+        '''
+        self.appendQuad('ENDFunc', None, None, None)
+
     def createQuadGoTo(self, type: str, appendCounter: bool = False) -> None:
         '''
         Creates a quadruple for the goto type.
