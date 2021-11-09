@@ -69,6 +69,9 @@ class VariablesAddress(object):
         raise SyntaxError
 
     def setCurrentScope(self, scope: str) -> None:
+        '''
+        Sets the current scope to the given parameter.
+        '''
         if scope in self.addressDictDefault.keys():
             self.currentScope = scope
         else:
