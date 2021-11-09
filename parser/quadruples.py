@@ -98,6 +98,12 @@ class Quadruples(object):
         '''
         self.appendQuad('ENDFunc', None, None, None)
 
+    def createQuadEra(self, size: int) -> None:
+        '''
+        Creates a quadruple for the new size block call.
+        '''
+        self.appendQuad('ERA', None, None, size)
+
     def createQuadGoTo(self, type: str, appendCounter: bool = False) -> None:
         '''
         Creates a quadruple for the goto type.

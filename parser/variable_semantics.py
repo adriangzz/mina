@@ -99,11 +99,13 @@ class FunctionTable(object):
             print(f'Error: function {name} not declared')
             raise SyntaxError
 
-    def functionExists(self, name: str) -> bool:
+    def functionExists(self, name: str) -> None:
         '''
-        Returns true if function exists in table, false otherwise.
+        Raises syntax error if funciton does not exist.
         '''
-        return name in self.functionNameMap
+        if name not in self.functionNameMap:
+            print(f'Error: function {name} not declared')
+            raise SyntaxError
 
     def setCurrentFunction(self, name: str, scope: str) -> None:
         '''
@@ -147,6 +149,12 @@ class FunctionTable(object):
         Gets program name.
         '''
         return self.programName
+
+    def getFuncitonSize(self, name: str) -> int:
+        '''
+        Gets function size.
+        '''
+        return self.functionNameMap[name]['size']
 
     def getVariable(self, name: str) -> dict:
         '''

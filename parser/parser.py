@@ -23,6 +23,7 @@ def p_program_id(p):
     table.setProgramName(p[2])
     table.addFunction(
         {'name': p[2], 'returnType': 'void', 'type': 'program', 'variables': {}}, 'global')
+    quad.createQuadGoTo('GOTO', False)
 
 
 def p_vars_functions(p):
@@ -44,6 +45,7 @@ def p_main_id(p):
     '''
     table.addFunction(
         {'name': p[1], 'returnType': 'void', 'type': 'main', 'variables': {}}, 'local')
+    quad.updateQuadGoTo()
 
 
 def p_block(p):
@@ -69,6 +71,7 @@ def p_statue(p):
            | read
            | write
            | return
+           | call
     '''
 
 
@@ -178,6 +181,40 @@ def p_equal_assign(p):
     equal_assign : EQUAL_ASSIGN
     '''
     quad.push(p[1], "operator")
+
+
+def p_call(p):
+    '''
+    call : id_call OPEN_PARENTHESIS parameters_expression CLOSE_PARENTHESIS SEMICOLON
+
+    '''
+
+
+def p_id_call(p):
+    '''
+    id_call : ID
+
+    '''
+    table.functionExists(p[1])
+    size = table.getFuncitonSize(p[1])
+    quad.createQuadEra(size)
+
+
+def p_parameters_expression(p):
+    '''
+    parameters_expression : expression_param
+                          | expression_param COMMA parameters_expression
+                          | empty
+
+    '''
+
+
+def p_expression_param(p):
+    '''
+    expression_param : expression
+
+    '''
+    # quad.print()
 
 
 def p_exp(p):
