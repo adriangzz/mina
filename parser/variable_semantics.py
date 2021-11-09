@@ -32,11 +32,11 @@ class FunctionTable(object):
             print("Error: function name already in use")
             raise SyntaxError
 
-    def addVariables(self, row: dict, name: str = None) -> bool:
+    def addVariables(self, row: dict, name: str = None) -> None:
         '''
         Function to add variables to current function.
         Uses last added function as default, but an extra optional parameter with the name of the function is accepted.
-        Returns true if variables were added, false otherwise.
+        Adds 1 to the function size in the table.
         '''
         if name and name in self.functionNameMap and row['name'] not in self.functionNameMap[name]['variables']:
             self.functionNameMap[name]['variables'][row['name']] = row
@@ -46,6 +46,8 @@ class FunctionTable(object):
             print("Error: variable name '" +
                   row['name'] + "' already in use")
             raise SyntaxError
+
+        self.addSize()
 
     def addParameters(self, type: str) -> None:
         '''
@@ -61,6 +63,14 @@ class FunctionTable(object):
         if name in self.functionNameMap:
             return self.functionNameMap[name]
         return {}
+
+    def addSize(self) -> None:
+        '''
+        Adds 1 to current function size.
+        '''
+        if self.functionNameMap[self.currFunction]['type'] == 'function':
+            size = self.functionNameMap[self.currFunction]['size']
+            self.functionNameMap[self.currFunction]['size'] = size + 1
 
     def getFunctions(self) -> dict:
         '''

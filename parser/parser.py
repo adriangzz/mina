@@ -7,7 +7,7 @@ import re
 
 table = FunctionTable()
 variableAddress = VariablesAddress()
-quad = Quadruples(variableAddress)
+quad = Quadruples(variableAddress, table)
 
 
 def p_expression_program(p):

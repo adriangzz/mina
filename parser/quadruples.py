@@ -1,6 +1,6 @@
 from collections import deque
 from parser.variable_address import VariablesAddress
-from parser.variable_semantics import SemanticCube
+from parser.variable_semantics import FunctionTable, SemanticCube
 
 
 class Quadruples(object):
@@ -8,7 +8,7 @@ class Quadruples(object):
     Class to create quadruples that will later be delivered to the virtual machine.
     '''
 
-    def __init__(self, variableAddress: VariablesAddress) -> None:
+    def __init__(self, variableAddress: VariablesAddress, table: FunctionTable) -> None:
         self.stackOperands = []
         self.stackOperators = []
         self.stackQuads = []
@@ -16,6 +16,7 @@ class Quadruples(object):
         self.goTo = []
         self.quadCounter = 1
         self.variableAddress = variableAddress
+        self.table = table
 
     def push(self, o: str, type: str) -> None:
         '''
@@ -77,6 +78,7 @@ class Quadruples(object):
                 'temporal', resultType)
             self.stackOperands.append((temp, resultType))
             self.appendQuad(operator, leftOperand, rightOperand, temp)
+            self.table.addSize()
         else:
             self.appendQuad(operator, rightOperand, None, leftOperand)
 
