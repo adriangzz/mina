@@ -97,7 +97,7 @@ def p_assign_id_arr(p):
     # Get var name without brackets
     varName = re.findall('_?[a-zA-Z][a-zA-Z0-9]*', p[1])[0]
     address = variableAddress.getTypeStartingAddress(
-        table.getCurrentFunctionType(), currType)
+        table.getCurrentFunctionScope(), currType)
     table.addVariables({'name': varName, 'type': currType, 'address': address})
 
 
@@ -122,7 +122,7 @@ def p_functions(p):
     if len(p) > 2:
         # Delete function table after finishing parsing and reset local variable address
         table.deleteFunctionVariables(table.getCurrentFunction())
-        variableAddress.resetScope(table.getCurrentFunctionType())
+        variableAddress.resetScope(table.getCurrentFunctionScope())
         variableAddress.resetScope('temporal')
         table.setCurrentFunction(table.getProgramName(), 'global')
 
@@ -401,6 +401,8 @@ def p_return_expression(p):
     '''
     return_expression : expression
     '''
+    lastOperandType = quad.getLastOperandType()
+    table.verifyReturn(lastOperandType)
     quad.createQuadReadWriteReturn('return')
 
 

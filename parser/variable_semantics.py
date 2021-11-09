@@ -14,7 +14,7 @@ class FunctionTable(object):
         self.functionNameMap = {}
         self.constantTable = {}
         self.currFunction = ''
-        self.currFunctionType = ''
+        self.currFunctionScope = ''
         self.programName = ''
         self.currType = ''
 
@@ -27,7 +27,7 @@ class FunctionTable(object):
         if row['name'] not in self.functionNameMap:
             self.functionNameMap[row['name']] = row
             self.currFunction = row['name']
-            self.currFunctionType = type
+            self.currFunctionScope = type
         else:
             print("Error: function name already in use")
             raise SyntaxError
@@ -94,7 +94,7 @@ class FunctionTable(object):
         Sets current function.
         '''
         self.currFunction = name
-        self.currFunctionType = scope
+        self.currFunctionScope = scope
 
     def getCurrentFunction(self) -> str:
         '''
@@ -102,11 +102,11 @@ class FunctionTable(object):
         '''
         return self.currFunction
 
-    def getCurrentFunctionType(self) -> str:
+    def getCurrentFunctionScope(self) -> str:
         '''
         Gets current function.
         '''
-        return self.currFunctionType
+        return self.currFunctionScope
 
     def getCurrentType(self) -> str:
         '''
@@ -167,6 +167,13 @@ class FunctionTable(object):
         Returns constant address.
         '''
         return self.constantTable[cons]
+
+    def verifyReturn(self, type: str) -> None:
+        functionReturnType = self.functionNameMap[self.currFunction]['type']
+        if functionReturnType != type:
+            print(
+                f'ERROR: return type {type} does not match function return type {functionReturnType}')
+            raise SyntaxError
 
 
 class SemanticCube(object):

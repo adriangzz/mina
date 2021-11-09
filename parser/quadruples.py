@@ -147,6 +147,14 @@ class Quadruples(object):
         '''
         return self.quadCounter
 
+    def getLastOperandType(self) -> int:
+        '''
+        Returns the last operand type
+        '''
+        operandTuple = self.stackOperands[-1]
+        rightOperandType = operandTuple[1]
+        return rightOperandType
+
     def print(self) -> None:
         '''
         Prints all the lists
