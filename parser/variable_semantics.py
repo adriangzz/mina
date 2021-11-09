@@ -178,7 +178,7 @@ class FunctionTable(object):
         '''
         Verifies the return type is the same as the one expected in the function, sets has return flag as true
         '''
-        functionReturnType = self.functionNameMap[self.currFunction]['type']
+        functionReturnType = self.functionNameMap[self.currFunction]['returnType']
         if functionReturnType != type:
             print(
                 f'ERROR: return type {type} does not match function return type {functionReturnType}')
@@ -190,7 +190,7 @@ class FunctionTable(object):
         '''
         Verifies the function if not void, had a return statement
         '''
-        if not self.functionNameMap[self.currFunction]['hasReturn'] and self.functionNameMap[self.currFunction]['type'] != 'void':
+        if not self.functionNameMap[self.currFunction]['hasReturn'] and self.functionNameMap[self.currFunction]['returnType'] != 'void':
             print(
                 f'ERROR: function {self.currFunction} has no return statement')
             raise SyntaxError

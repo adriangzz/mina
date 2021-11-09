@@ -22,7 +22,7 @@ def p_program_id(p):
     '''
     table.setProgramName(p[2])
     table.addFunction(
-        {'name': p[2], 'type': 'void', 'variables': {}}, 'global')
+        {'name': p[2], 'returnType': 'void', 'type': 'program', 'variables': {}}, 'global')
 
 
 def p_vars_functions(p):
@@ -42,7 +42,8 @@ def p_main_id(p):
     '''
     main_id : MAIN_ID OPEN_PARENTHESIS CLOSE_PARENTHESIS
     '''
-    table.addFunction({'name': p[1], 'variables': {}}, 'local')
+    table.addFunction(
+        {'name': p[1], 'returnType': 'void', 'type': 'main', 'variables': {}}, 'local')
 
 
 def p_block(p):
@@ -140,6 +141,7 @@ def p_functions(p):
         table.deleteFunctionVariables(table.getCurrentFunction())
         variableAddress.resetScope(table.getCurrentFunctionScope())
         variableAddress.resetScope('temporal')
+        quad.createQuadEndFunc()
 
         # Verify function has return type if not void
         table.verifyHasReturn()
@@ -152,7 +154,7 @@ def p_functions_id(p):
     '''
     initAddress = quad.getQuadCounter()
     table.addFunction(
-        {'name': p[3], 'type': p[2], 'address': initAddress, 'hasReturn': False, 'variables': {}, 'parameters': []}, 'local')
+        {'name': p[3], 'returnType': p[2], 'type': 'function', 'address': initAddress, 'hasReturn': False, 'variables': {}, 'parameters': [], 'size': 0}, 'local')
 
 
 def p_parameters(p):
