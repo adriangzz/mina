@@ -17,6 +17,8 @@ class Quadruples(object):
         self.quadCounter = 1
         self.variableAddress = variableAddress
         self.table = table
+        self.currFunctionParameterCounter = 0
+        self.currFunctionCall = ''
 
     def push(self, o: str, type: str) -> None:
         '''
@@ -103,6 +105,38 @@ class Quadruples(object):
         Creates a quadruple for the new size block call.
         '''
         self.appendQuad('ERA', None, None, size)
+        self.currFunctionParameterCounter = 0
+
+    def createQuadParameter(self) -> None:
+        '''
+        Creates a quadruple for the parameter.
+        '''
+        rightOperandTuple = self.stackOperands.pop()
+
+        rightOperand = rightOperandTuple[0]
+        rightOperandType = rightOperandTuple[1]
+
+        parameterType = self.table.getParameter(self.currFunctionCall,
+                                                self.currFunctionParameterCounter)
+
+        if rightOperandType == parameterType:
+            pName = "P#" + str(self.currFunctionParameterCounter + 1)
+            self.appendQuad('PARAM', None, rightOperand, pName)
+            self.currFunctionParameterCounter += 1
+        else:
+            print(
+                f'Error: parameter of type {rightOperandType} is different from parameter of type {parameterType} expected')
+            raise SyntaxError
+
+    def checkEndOfParameters(self):
+        '''
+        Check function has gotten to the end of parameters
+        '''
+        paramCount = self.table.getParameterCount(self.currFunctionCall)
+        if self.currFunctionParameterCounter != paramCount:
+            print(
+                f'Error: function {self.currFunctionCall} expected {paramCount} parameters and was only given {self.currFunctionParameterCounter}')
+            raise SyntaxError
 
     def createQuadGoTo(self, type: str, appendCounter: bool = False) -> None:
         '''
@@ -157,17 +191,23 @@ class Quadruples(object):
 
     def getQuadCounter(self) -> int:
         '''
-        Returns the current quad counter
+        Returns the current quad counter.
         '''
         return self.quadCounter
 
     def getLastOperandType(self) -> int:
         '''
-        Returns the last operand type
+        Returns the last operand type.
         '''
         operandTuple = self.stackOperands[-1]
         rightOperandType = operandTuple[1]
         return rightOperandType
+
+    def setCurrentFunctionCall(self, name: str) -> None:
+        '''
+        Set the current function being called.
+        '''
+        self.currFunctionCall = name
 
     def print(self) -> None:
         '''

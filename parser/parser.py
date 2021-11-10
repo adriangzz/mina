@@ -188,6 +188,7 @@ def p_call(p):
     call : id_call OPEN_PARENTHESIS parameters_expression CLOSE_PARENTHESIS SEMICOLON
 
     '''
+    quad.checkEndOfParameters()
 
 
 def p_id_call(p):
@@ -197,6 +198,7 @@ def p_id_call(p):
     '''
     table.functionExists(p[1])
     size = table.getFuncitonSize(p[1])
+    quad.setCurrentFunctionCall(p[1])
     quad.createQuadEra(size)
 
 
@@ -214,7 +216,7 @@ def p_expression_param(p):
     expression_param : expression
 
     '''
-    # quad.print()
+    quad.createQuadParameter()
 
 
 def p_exp(p):

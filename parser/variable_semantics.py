@@ -55,6 +55,24 @@ class FunctionTable(object):
         '''
         self.functionNameMap[self.currFunction]['parameters'].append(type)
 
+    def getParameter(self, function: str, idx: int) -> str:
+        '''
+        Function to get parameter type of given function and the index.
+        '''
+        paramCount = len(self.functionNameMap[function]['parameters'])
+        if paramCount > idx:
+            return self.functionNameMap[function]['parameters'][idx]
+        else:
+            print(
+                f'Error: function {function} only takes {paramCount} arguments')
+            raise SyntaxError
+
+    def getParameterCount(self, function: str) -> str:
+        '''
+        Function to get parameter count of given function.
+        '''
+        return len(self.functionNameMap[function]['parameters'])
+
     def getFunction(self, name: str) -> dict:
         '''
         Function that returns the dictionary of the name of function given.
