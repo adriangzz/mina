@@ -107,6 +107,13 @@ class Quadruples(object):
         self.appendQuad('ERA', None, None, size)
         self.currFunctionParameterCounter = 0
 
+    def createQuadGoSUB(self, function: str) -> None:
+        '''
+        Creates a quadruple for gosub to the function call.
+        '''
+        address = self.table.getFunctionStartingAddress(function)
+        self.appendQuad('GOSUB', None, None, address)
+
     def createQuadParameter(self) -> None:
         '''
         Creates a quadruple for the parameter.

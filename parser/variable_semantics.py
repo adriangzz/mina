@@ -210,6 +210,17 @@ class FunctionTable(object):
         '''
         return self.constantTable[cons]
 
+    def getFunctionStartingAddress(self, function: str) -> int:
+        '''
+        Returns function starting address.
+        '''
+        if function in self.functionNameMap:
+            return self.functionNameMap[function]['address']
+        else:
+            print(
+                f'ERROR: function {function} was not found')
+            raise SyntaxError
+
     def verifyReturnType(self, type: str) -> None:
         '''
         Verifies the return type is the same as the one expected in the function, sets has return flag as true

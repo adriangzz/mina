@@ -189,6 +189,7 @@ def p_call(p):
 
     '''
     quad.checkEndOfParameters()
+    quad.createQuadGoSUB(p[1])
 
 
 def p_id_call(p):
@@ -200,6 +201,7 @@ def p_id_call(p):
     size = table.getFuncitonSize(p[1])
     quad.setCurrentFunctionCall(p[1])
     quad.createQuadEra(size)
+    p[0] = p[1]
 
 
 def p_parameters_expression(p):
