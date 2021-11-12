@@ -155,9 +155,16 @@ def p_functions_id(p):
     '''
     functions_id : FUNCTION_ID type ID
     '''
+    returnType = p[2]
+    if returnType != 'void':
+        address = variableAddress.getTypeStartingAddress(
+            'global', returnType)
+        table.addVariables(
+            {'name': p[3], 'type': returnType, 'address': address})
+
     initAddress = quad.getQuadCounter()
     table.addFunction(
-        {'name': p[3], 'returnType': p[2], 'type': 'function', 'address': initAddress, 'hasReturn': False, 'variables': {}, 'parameters': [], 'size': 0}, 'local')
+        {'name': p[3], 'returnType': returnType, 'type': 'function', 'address': initAddress, 'hasReturn': False, 'variables': {}, 'parameters': [], 'size': 0}, 'local')
 
 
 def p_parameters(p):
