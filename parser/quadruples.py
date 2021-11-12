@@ -19,6 +19,27 @@ class Quadruples(object):
         self.table = table
         self.currFunctionParameterCounter = 0
         self.currFunctionCall = ''
+        self.operandCodes = {
+            '+': '1',
+            '-': '2',
+            '*': '3',
+            '/': '4',
+            '<': '5',
+            '>': '6',
+            '<=': '7',
+            '>=': '8',
+            '==': '9',
+            '!=': '10',
+            'GOTO': '11',
+            'GOTOF': '12',
+            'print': '13',
+            'return': '14',
+            'ENDFunc': '15',
+            'ERA': '16',
+            'PARAM': '17',
+            'GOSUB': '18',
+            '=': '19',
+        }
 
     def push(self, o: str, type: str) -> None:
         '''
@@ -49,8 +70,9 @@ class Quadruples(object):
         '''
         Appends a tuple of the given parameters to the quads list and adds 1 to the quad counter.
         '''
+        operand = self.getOperandCode(o)
         self.stackQuads.append(
-            (o, l, r, res))
+            (operand, l, r, res))
         self.quadCounter += 1
 
     def appendGoTo(self, counter: int) -> None:
@@ -112,7 +134,7 @@ class Quadruples(object):
         Creates a quadruple for gosub to the function call.
         '''
         address = self.table.getFunctionStartingAddress(function)
-        self.appendQuad('GOSUB', None, None, address)
+        self.appendQuad('GOSUB', None, None, function)
 
     def createQuadParameter(self) -> None:
         '''
@@ -215,6 +237,12 @@ class Quadruples(object):
         Set the current function being called.
         '''
         self.currFunctionCall = name
+
+    def getOperandCode(self, operand: str) -> str:
+        '''
+        Get the code given the operand.
+        '''
+        return self.operandCodes[operand]
 
     def print(self) -> None:
         '''
