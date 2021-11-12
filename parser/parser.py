@@ -200,7 +200,7 @@ def p_id_call(p):
     table.functionExists(p[1])
     size = table.getFuncitonSize(p[1])
     quad.setCurrentFunctionCall(p[1])
-    quad.createQuadEra(size)
+    quad.createQuadEra(p[1])
     p[0] = p[1]
 
 
@@ -445,6 +445,7 @@ def p_string(p):
 def p_comparison(p):
     '''
     comparison : GREATER_THAN
+    comparison : GREATER_THAN_EQUAL
                | LESS_THAN
                | LESS_THAN_EQUAL
                | NOT_EQUAL
