@@ -71,7 +71,7 @@ def p_statue(p):
            | read
            | write
            | return
-           | call
+           | call SEMICOLON
     '''
 
 
@@ -144,7 +144,6 @@ def p_functions(p):
         table.deleteFunctionVariables(table.getCurrentFunction())
         variableAddress.resetScope(table.getCurrentFunctionScope())
         variableAddress.resetScope('temporal')
-        quad.createQuadEndFunc()
 
         # Verify function has return type if not void
         table.verifyHasReturn()
@@ -165,6 +164,7 @@ def p_functions_id(p):
     initAddress = quad.getQuadCounter()
     table.addFunction(
         {'name': p[3], 'returnType': returnType, 'type': 'function', 'address': initAddress, 'hasReturn': False, 'variables': {}, 'parameters': [], 'size': 0}, 'local')
+    p[0] = p[3]
 
 
 def p_parameters(p):
@@ -192,11 +192,15 @@ def p_equal_assign(p):
 
 def p_call(p):
     '''
-    call : id_call OPEN_PARENTHESIS parameters_expression CLOSE_PARENTHESIS SEMICOLON
+    call : id_call OPEN_PARENTHESIS parameters_expression CLOSE_PARENTHESIS
 
     '''
     quad.checkEndOfParameters()
     quad.createQuadGoSUB(p[1])
+    returnType = table.getFunctionReturnType(p[1])
+
+    if returnType != 'void':
+        quad.setGlobalVarToTemp(p[1])
 
 
 def p_id_call(p):
@@ -248,6 +252,7 @@ def p_factor(p):
     factor : open_parenthesis expression close_parenthesis
            | plus_minus var_cte
            | var_cte
+           | call
     '''
 
 
@@ -473,7 +478,8 @@ def p_return_expression(p):
     '''
     lastOperandType = quad.getLastOperandType()
     table.verifyReturnType(lastOperandType)
-    quad.createQuadReadWriteReturn('return')
+    quad.createQuadReturn('=')
+    quad.createQuadEndFunc()
 
 
 def p_write(p):

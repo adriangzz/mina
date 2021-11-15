@@ -186,6 +186,22 @@ class FunctionTable(object):
             f'Error: variable {name} not declared in scope or global variables')
         raise SyntaxError
 
+    def getGlobalVariable(self, name: str) -> dict:
+        '''
+        Returns the given function global variable.
+        '''
+        if name in self.functionNameMap[self.programName]['variables']:
+            return self.functionNameMap[self.programName]['variables'][name]
+        print(
+            f'Error: variable {name} not declared in scope or global variables')
+        raise SyntaxError
+
+    def getFunctionReturnType(self, name: str) -> dict:
+        '''
+        Returns given function return type.
+        '''
+        return self.functionNameMap[name]['returnType']
+
     def deleteTable(self) -> None:
         '''
         Deletes table.

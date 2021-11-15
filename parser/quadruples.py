@@ -70,9 +70,9 @@ class Quadruples(object):
         '''
         Appends a tuple of the given parameters to the quads list and adds 1 to the quad counter.
         '''
-        operand = self.getOperandCode(o)
+        o = self.getOperandCode(o)
         self.stackQuads.append(
-            (operand, l, r, res))
+            (o, l, r, res))
         self.quadCounter += 1
 
     def appendGoTo(self, counter: int) -> None:
@@ -111,10 +111,35 @@ class Quadruples(object):
         Creates a quadruple for the print and read type.
         '''
         rightOperandTuple = self.stackOperands.pop()
-
         rightOperand = rightOperandTuple[0]
 
         self.appendQuad(type, None, None, rightOperand)
+
+    def createQuadReturn(self, type: str) -> None:
+        '''
+        Creates a quadruple for the return type.
+        '''
+        rightOperandTuple = self.stackOperands.pop()
+        rightOperand = rightOperandTuple[0]
+
+        functionName = self.table.getCurrentFunction()
+        globalVar = self.table.getVariable(functionName)
+
+        self.appendQuad(type, rightOperand, None, globalVar['address'])
+
+    def setGlobalVarToTemp(self, name: str) -> None:
+        '''
+        '''
+        globalVar = self.table.getGlobalVariable(name)
+
+        resultType = self.cube.getResult(
+            globalVar['type'], globalVar['type'], '=')
+
+        temp = self.variableAddress.getTypeStartingAddress(
+            'temporal', resultType)
+        self.stackOperands.append((temp, resultType))
+        self.appendQuad('=', globalVar['address'], None, temp)
+        self.table.addSize()
 
     def createQuadEndFunc(self) -> None:
         '''
