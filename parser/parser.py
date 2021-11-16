@@ -451,7 +451,13 @@ def p_string(p):
     '''
     string : STRING
     '''
-    quad.push(p[1], 'string')
+    if table.isConstant(p[1]):
+        address = table.getConstant(p[1])
+        quad.push(address, 'string')
+    else:
+        address = variableAddress.getTypeStartingAddress('constant', 'string')
+        table.addConstant(p[1], address)
+        quad.push(address, 'string')
 
 
 def p_comparison(p):
@@ -552,5 +558,6 @@ def parseFile(file):
     # Parse the file
     parser.parse(file, lexer)
     print(table.getFunctions())
+    print(table.getConstants())
     quad.printQuad()
     table.deleteTable()
