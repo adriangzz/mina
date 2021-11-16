@@ -96,6 +96,12 @@ class FunctionTable(object):
         '''
         return self.functionNameMap
 
+    def getConstants(self) -> dict:
+        '''
+        Returns the whole dictionary of constants.
+        '''
+        return self.constantTable
+
     def deleteFunction(self, name: str) -> bool:
         '''
         Deletes function given the name.
