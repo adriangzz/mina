@@ -1,5 +1,6 @@
 from lib import yacc
 from parser.lexer import tokens, lexer
+from parser.obj_file import ObjectFile
 from parser.quadruples import Quadruples
 from parser.variable_address import VariablesAddress
 from parser.variable_semantics import FunctionTable
@@ -8,6 +9,7 @@ import re
 table = FunctionTable()
 variableAddress = VariablesAddress()
 quad = Quadruples(variableAddress, table)
+obj_file = ObjectFile(quad, table)
 
 
 def p_expression_program(p):
@@ -557,7 +559,12 @@ def parseFile(file):
 
     # Parse the file
     parser.parse(file, lexer)
-    print(table.getFunctions())
-    print(table.getConstants())
-    quad.printQuad()
+
+    # Create object file
+    obj_file.create()
+
+    # Print object file
+    obj_file.print()
+
+    # Delete table
     table.deleteTable()

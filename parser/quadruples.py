@@ -269,6 +269,12 @@ class Quadruples(object):
         '''
         return self.operandCodes[operand]
 
+    def getQuads(self) -> list:
+        '''
+        Get the quads.
+        '''
+        return self.stackQuads
+
     def print(self) -> None:
         '''
         Prints all the lists
