@@ -35,7 +35,7 @@ class Quadruples(object):
             'GOTOF': '12',
             'GOTOT': '13',
             'print': '14',
-            'return': '15',
+            'read': '15',
             'ENDFunc': '16',
             'ERA': '17',
             'PARAM': '18',
