@@ -1,4 +1,5 @@
 from copy import deepcopy
+import sys
 
 
 class VariablesAddress(object):
@@ -9,29 +10,25 @@ class VariablesAddress(object):
     def __init__(self) -> None:
         self.addressDictDefault = {
             'global': {
-                "int": 1000,
-                "float": 4000,
-                "char": 6000,
-                "bool": 9000,
+                "int": 0,
+                "float": 250,
+                "char": 500,
+                "bool": 750,
             },
             'local': {
-                "int": 10000,
-                "float": 14000,
-                "char": 16000,
-                "bool": 19000,
-            },
-            'temporal': {
-                "int": 20000,
-                "float": 24000,
-                "char": 26000,
-                "bool": 29000,
+                "int": 1000,
+                "float": 1250,
+                "char": 1500,
+                "bool": 1750,
+                "temporal": 2000
             },
             'constant': {
-                "int": 30000,
-                "float": 34000,
-                "char": 36000,
-                "bool": 39000,
-            }
+                "int": 2250,
+                "float": 2500,
+                "char": 2750,
+                "bool": 3000,
+                "string": 3250
+            },
 
         }
         self.addressDict = deepcopy(self.addressDictDefault)
@@ -49,7 +46,7 @@ class VariablesAddress(object):
 
     def getType(self, address: int) -> tuple:
         '''
-        Returns the variable type and scope depending on the address given.
+        Returns the variable type, scope and starting address depending on the address given.
         '''
         lastType = 'int'
         lastScope = 'global'
@@ -58,15 +55,14 @@ class VariablesAddress(object):
             for types in self.addressDict[scope].keys():
                 if address <= self.addressDict[scope][types]:
                     if address == self.addressDict[scope][types]:
-                        return (scope, types)
+                        return (scope, types, self.addressDictDefault[scope][types])
                     else:
-                        return (lastScope, lastType)
+                        return (lastScope, lastType, self.addressDictDefault[lastScope][lastType])
                 else:
                     lastType = types
                     lastScope = scope
 
-        print(f'Error: address not found')
-        raise SyntaxError
+        sys.exit(f'Error: address not found')
 
     def setCurrentScope(self, scope: str) -> None:
         '''
@@ -75,8 +71,7 @@ class VariablesAddress(object):
         if scope in self.addressDictDefault.keys():
             self.currentScope = scope
         else:
-            print(f'Error: scope name not found')
-            raise SyntaxError
+            sys.exit(f'Error: scope {scope} name not found')
 
     def resetScope(self, scope: str) -> None:
         '''
@@ -85,5 +80,4 @@ class VariablesAddress(object):
         if scope in self.addressDict.keys():
             self.addressDict[scope] = deepcopy(self.addressDictDefault[scope])
         else:
-            print(f'Error: scope name not found')
-            raise SyntaxError
+            sys.exit(f'Error: scope {scope} name not found')
