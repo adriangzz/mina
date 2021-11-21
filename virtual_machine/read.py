@@ -133,7 +133,16 @@ class ReadObjFile(object):
                 data1 = self.memory.getMemoryValue(self.quads[iP - 1][3])
                 print(data1)
             elif instruction == '15':
-                pass
+                address = self.quads[iP - 1][3]
+                type = self.variableAddress.getType(address)[1]
+                aux = input()
+                if type == 'int':
+                    aux = int(aux)
+                elif type == 'float':
+                    aux = float(aux)
+                elif type == 'bool':
+                    aux = bool(aux)
+                self.memory.setMemoryValue(address, aux)
             elif instruction == '16':
                 self.memory.deleteLocalMemory()
                 self.memory.deleteCurrentMemory()
