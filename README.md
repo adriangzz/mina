@@ -5,7 +5,7 @@ The compiler uses a virtual machine to keep track of memory use.
 
 ## Installation
 
-To use the compiler, python3 must be installed in the system
+To use the compiler, Python 3 must be installed in the system
 
 ## Usage
 
