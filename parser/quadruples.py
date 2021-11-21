@@ -32,13 +32,14 @@ class Quadruples(object):
             '!=': '10',
             'GOTO': '11',
             'GOTOF': '12',
-            'print': '13',
-            'return': '14',
-            'ENDFunc': '15',
-            'ERA': '16',
-            'PARAM': '17',
-            'GOSUB': '18',
-            '=': '19',
+            'GOTOT': '13',
+            'print': '14',
+            'return': '15',
+            'ENDFunc': '16',
+            'ERA': '17',
+            'PARAM': '18',
+            'GOSUB': '19',
+            '=': '20',
         }
 
     def push(self, o: str, type: str) -> None:
@@ -99,10 +100,10 @@ class Quadruples(object):
 
         if not isLowLevel:
             temp = self.variableAddress.getTypeStartingAddress(
-                'temporal', resultType)
+                'local', 'temporal')
             self.stackOperands.append((temp, resultType))
             self.appendQuad(operator, leftOperand, rightOperand, temp)
-            self.table.addSize()
+            self.table.addSize('temporal')
         else:
             self.appendQuad(operator, rightOperand, None, leftOperand)
 
@@ -136,10 +137,10 @@ class Quadruples(object):
             globalVar['type'], globalVar['type'], '=')
 
         temp = self.variableAddress.getTypeStartingAddress(
-            'temporal', resultType)
+            'local', 'temporal')
         self.stackOperands.append((temp, resultType))
         self.appendQuad('=', globalVar['address'], None, temp)
-        self.table.addSize()
+        self.table.addSize('temporal')
 
     def createQuadEndFunc(self) -> None:
         '''
