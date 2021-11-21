@@ -1,6 +1,7 @@
 from collections import deque
 from parser.variable_address import VariablesAddress
 from parser.variable_semantics import FunctionTable, SemanticCube
+import sys
 
 
 class Quadruples(object):
@@ -64,8 +65,8 @@ class Quadruples(object):
             elif operator == ')':
                 self.stackOperators.pop()
                 self.stackOperators.pop()
-                self.checkOperator(['*', '/'])
-                self.checkOperator(['+', '-'])
+                self.checkOperator(['*', '/'], False)
+                self.checkOperator(['+', '-'], False)
 
     def appendQuad(self, o: str, l: any, r: any, res: any) -> None:
         '''
@@ -175,13 +176,12 @@ class Quadruples(object):
                                                 self.currFunctionParameterCounter)
 
         if rightOperandType == parameterType:
-            pName = "P#" + str(self.currFunctionParameterCounter + 1)
-            self.appendQuad('PARAM', None, rightOperand, pName)
+            pNum = self.currFunctionParameterCounter + 1
+            self.appendQuad('PARAM', None, rightOperand, pNum)
             self.currFunctionParameterCounter += 1
         else:
-            print(
+            sys.exit(
                 f'Error: parameter of type {rightOperandType} is different from parameter of type {parameterType} expected')
-            raise SyntaxError
 
     def checkEndOfParameters(self):
         '''
@@ -189,9 +189,8 @@ class Quadruples(object):
         '''
         paramCount = self.table.getParameterCount(self.currFunctionCall)
         if self.currFunctionParameterCounter != paramCount:
-            print(
+            sys.exit(
                 f'Error: function {self.currFunctionCall} expected {paramCount} parameters and was only given {self.currFunctionParameterCounter}')
-            raise SyntaxError
 
     def createQuadGoTo(self, type: str, appendCounter: bool = False) -> None:
         '''
@@ -204,8 +203,7 @@ class Quadruples(object):
             rightOperandType = rightOperandTuple[1]
 
             if rightOperandType != 'bool' and rightOperandType != 'int' and rightOperandType != 'float':
-                print("ERROR: condition must be of type bool, int or float")
-                raise SyntaxError
+                sys.exit("ERROR: condition must be of type bool, int or float")
 
             if appendCounter:
                 prevGoTo = self.goTo.pop()
