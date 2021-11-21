@@ -5,6 +5,7 @@ from parser.quadruples import Quadruples
 from parser.variable_address import VariablesAddress
 from parser.variable_semantics import FunctionTable
 import re
+import sys
 
 table = FunctionTable()
 variableAddress = VariablesAddress()
@@ -148,6 +149,9 @@ def p_functions(p):
 
         # Verify function has return type if not void
         table.verifyHasReturn()
+        returnType = table.getFunctionReturnType(p[1])
+        if returnType == 'void':
+            quad.createQuadEndFunc()
         table.setCurrentFunction(table.getProgramName(), 'global')
 
 
@@ -210,7 +214,6 @@ def p_id_call(p):
 
     '''
     table.functionExists(p[1])
-    size = table.getFuncitonSize(p[1])
     quad.setCurrentFunctionCall(p[1])
     quad.createQuadEra(p[1])
     p[0] = p[1]
@@ -311,12 +314,13 @@ def p_string(p):
     '''
     string : STRING
     '''
-    if table.isConstant(p[1]):
-        address = table.getConstant(p[1])
+    string = p[1][1:-1]
+    if table.isConstant(string):
+        address = table.getConstant(string)
         quad.push(address, 'string')
     else:
         address = variableAddress.getTypeStartingAddress('constant', 'string')
-        table.addConstant(p[1], address, 'string')
+        table.addConstant(string, address, 'string')
         quad.push(address, 'string')
 
 
@@ -452,12 +456,13 @@ def p_string(p):
     '''
     string : STRING
     '''
-    if table.isConstant(p[1]):
-        address = table.getConstant(p[1])
+    string = p[1][1:-1]
+    if table.isConstant(string):
+        address = table.getConstant(string)
         quad.push(address, 'string')
     else:
         address = variableAddress.getTypeStartingAddress('constant', 'string')
-        table.addConstant(p[1], address, 'string')
+        table.addConstant(string, address, 'string')
         quad.push(address, 'string')
 
 
@@ -549,8 +554,7 @@ def p_empty(p):
 
 # Error rule for syntax errors
 def p_error(p):
-    print("Syntax error in input!", p)
-    raise SyntaxError
+    sys.exit("Syntax error in input!", p)
 
 
 def parseFile(file):
