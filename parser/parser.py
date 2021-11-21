@@ -24,7 +24,7 @@ def p_program_id(p):
     '''
     table.setProgramName(p[2])
     table.addFunction(
-        {'name': p[2], 'returnType': 'void', 'type': 'program', 'variables': {}}, 'global')
+        {'name': p[2], 'returnType': 'void', 'type': 'program', 'variables': {}, 'size': {}}, 'global')
     quad.createQuadGoTo('GOTO', False)
 
 
@@ -46,7 +46,7 @@ def p_main_id(p):
     main_id : MAIN_ID OPEN_PARENTHESIS CLOSE_PARENTHESIS
     '''
     table.addFunction(
-        {'name': p[1], 'returnType': 'void', 'type': 'main', 'variables': {}}, 'local')
+        {'name': p[1], 'returnType': 'void', 'type': 'main', 'variables': {}, 'size': {}}, 'local')
     quad.updateQuadGoTo()
 
 
@@ -145,7 +145,6 @@ def p_functions(p):
         # Delete function table after finishing parsing and reset local variable address
         table.deleteFunctionVariables(table.getCurrentFunction())
         variableAddress.resetScope(table.getCurrentFunctionScope())
-        variableAddress.resetScope('temporal')
 
         # Verify function has return type if not void
         table.verifyHasReturn()
@@ -165,7 +164,7 @@ def p_functions_id(p):
 
     initAddress = quad.getQuadCounter()
     table.addFunction(
-        {'name': p[3], 'returnType': returnType, 'type': 'function', 'address': initAddress, 'hasReturn': False, 'variables': {}, 'parameters': [], 'size': 0}, 'local')
+        {'name': p[3], 'returnType': returnType, 'type': 'function', 'address': initAddress, 'hasReturn': False, 'variables': {}, 'parameters': [], 'size': {}}, 'local')
     p[0] = p[3]
 
 
@@ -291,7 +290,7 @@ def p_int(p):
         quad.push(address, 'int')
     else:
         address = variableAddress.getTypeStartingAddress('constant', 'int')
-        table.addConstant(p[1], address)
+        table.addConstant(p[1], address, 'int')
         quad.push(address, 'int')
 
 
@@ -304,7 +303,7 @@ def p_float(p):
         quad.push(address, 'float')
     else:
         address = variableAddress.getTypeStartingAddress('constant', 'float')
-        table.addConstant(p[1], address)
+        table.addConstant(p[1], address, 'float')
         quad.push(address, 'float')
 
 
@@ -317,7 +316,7 @@ def p_string(p):
         quad.push(address, 'string')
     else:
         address = variableAddress.getTypeStartingAddress('constant', 'string')
-        table.addConstant(p[1], address)
+        table.addConstant(p[1], address, 'string')
         quad.push(address, 'string')
 
 
@@ -330,7 +329,7 @@ def p_char(p):
         quad.push(address, 'char')
     else:
         address = variableAddress.getTypeStartingAddress('constant', 'char')
-        table.addConstant(p[1], address)
+        table.addConstant(p[1], address, 'char')
         quad.push(address, 'char')
 
 
@@ -458,7 +457,7 @@ def p_string(p):
         quad.push(address, 'string')
     else:
         address = variableAddress.getTypeStartingAddress('constant', 'string')
-        table.addConstant(p[1], address)
+        table.addConstant(p[1], address, 'string')
         quad.push(address, 'string')
 
 
@@ -551,6 +550,7 @@ def p_empty(p):
 # Error rule for syntax errors
 def p_error(p):
     print("Syntax error in input!", p)
+    raise SyntaxError
 
 
 def parseFile(file):
