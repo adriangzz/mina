@@ -62,7 +62,7 @@ class VariablesAddress(object):
                     lastType = types
                     lastScope = scope
 
-        sys.exit(f'Error: address not found')
+        return (scope, types, self.addressDictDefault[scope][types])
 
     def setCurrentScope(self, scope: str) -> None:
         '''
