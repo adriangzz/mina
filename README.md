@@ -1,6 +1,6 @@
 # Mina
 
-Mina is a compiler made entirely with python using PLY (Python Lex-Yacc).
+Mina is a compiler made entirely with Python using PLY (Python Lex-Yacc).
 The compiler uses a virtual machine to keep track of memory use.
 
 ## Installation
