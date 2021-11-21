@@ -1,4 +1,5 @@
 from parser.variable_address import VariablesAddress
+import sys
 
 
 class FunctionTable(object):
@@ -12,7 +13,7 @@ class FunctionTable(object):
 
     def __init__(self) -> None:
         self.functionNameMap = {}
-        self.constantTable = {}
+        self.constantTable = {'size': {}, 'vars': {}}
         self.currFunction = ''
         self.currFunctionScope = ''
         self.programName = ''
@@ -29,8 +30,7 @@ class FunctionTable(object):
             self.currFunction = row['name']
             self.currFunctionScope = type
         else:
-            print("Error: function name already in use")
-            raise SyntaxError
+            sys.exit("Error: function name already in use")
 
     def addVariables(self, row: dict, name: str = None) -> None:
         '''
@@ -43,11 +43,10 @@ class FunctionTable(object):
         elif row['name'] not in self.functionNameMap[self.currFunction]['variables']:
             self.functionNameMap[self.currFunction]['variables'][row['name']] = row
         else:
-            print("Error: variable name '" +
-                  row['name'] + "' already in use")
-            raise SyntaxError
+            sys.exit("Error: variable name '" +
+                     row['name'] + "' already in use")
 
-        self.addSize()
+        self.addSize(row['type'])
 
     def addParameters(self, type: str) -> None:
         '''
@@ -63,9 +62,8 @@ class FunctionTable(object):
         if paramCount > idx:
             return self.functionNameMap[function]['parameters'][idx]
         else:
-            print(
+            sys.exit(
                 f'Error: function {function} only takes {paramCount} arguments')
-            raise SyntaxError
 
     def getParameterCount(self, function: str) -> str:
         '''
@@ -82,13 +80,14 @@ class FunctionTable(object):
             return self.functionNameMap[name]
         return {}
 
-    def addSize(self) -> None:
+    def addSize(self, type) -> None:
         '''
         Adds 1 to current function size.
         '''
-        if self.functionNameMap[self.currFunction]['type'] == 'function':
-            size = self.functionNameMap[self.currFunction]['size']
-            self.functionNameMap[self.currFunction]['size'] = size + 1
+        if type in self.functionNameMap[self.currFunction]['size']:
+            self.functionNameMap[self.currFunction]['size'][type] += 1
+        else:
+            self.functionNameMap[self.currFunction]['size'][type] = 1
 
     def getFunctions(self) -> dict:
         '''
@@ -120,16 +119,14 @@ class FunctionTable(object):
         if name in self.functionNameMap:
             self.functionNameMap[name].pop('variables')
         else:
-            print(f'Error: function {name} not declared')
-            raise SyntaxError
+            sys.exit(f'Error: function {name} not declared')
 
     def functionExists(self, name: str) -> None:
         '''
         Raises syntax error if funciton does not exist.
         '''
         if name not in self.functionNameMap:
-            print(f'Error: function {name} not declared')
-            raise SyntaxError
+            sys.exit(f'Error: function {name} not declared')
 
     def setCurrentFunction(self, name: str, scope: str) -> None:
         '''
@@ -174,7 +171,7 @@ class FunctionTable(object):
         '''
         return self.programName
 
-    def getFuncitonSize(self, name: str) -> int:
+    def getFuncitonSize(self, name: str) -> dict:
         '''
         Gets function size.
         '''
@@ -188,9 +185,8 @@ class FunctionTable(object):
             return self.functionNameMap[self.currFunction]['variables'][name]
         elif name in self.functionNameMap[self.programName]['variables']:
             return self.functionNameMap[self.programName]['variables'][name]
-        print(
+        sys.exit(
             f'Error: variable {name} not declared in scope or global variables')
-        raise SyntaxError
 
     def getGlobalVariable(self, name: str) -> dict:
         '''
@@ -198,9 +194,8 @@ class FunctionTable(object):
         '''
         if name in self.functionNameMap[self.programName]['variables']:
             return self.functionNameMap[self.programName]['variables'][name]
-        print(
+        sys.exit(
             f'Error: variable {name} not declared in scope or global variables')
-        raise SyntaxError
 
     def getFunctionReturnType(self, name: str) -> dict:
         '''
@@ -218,19 +213,23 @@ class FunctionTable(object):
         '''
         Check if constant exists in the table.
         '''
-        return cons in self.constantTable
+        return cons in self.constantTable['vars']
 
-    def addConstant(self, cons: any, address: int) -> None:
+    def addConstant(self, cons: any, address: int, type: str) -> None:
         '''
         Adds constant to table.
         '''
-        self.constantTable[cons] = address
+        self.constantTable['vars'][cons] = (address, type)
+        if type in self.constantTable['size']:
+            self.constantTable['size'][type] += 1
+        else:
+            self.constantTable['size'][type] = 1
 
     def getConstant(self, cons: any) -> int:
         '''
         Returns constant address.
         '''
-        return self.constantTable[cons]
+        return self.constantTable['vars'][cons][0]
 
     def getFunctionStartingAddress(self, function: str) -> int:
         '''
@@ -239,9 +238,8 @@ class FunctionTable(object):
         if function in self.functionNameMap:
             return self.functionNameMap[function]['address']
         else:
-            print(
+            sys.exit(
                 f'ERROR: function {function} was not found')
-            raise SyntaxError
 
     def verifyReturnType(self, type: str) -> None:
         '''
@@ -249,9 +247,8 @@ class FunctionTable(object):
         '''
         functionReturnType = self.functionNameMap[self.currFunction]['returnType']
         if functionReturnType != type:
-            print(
+            sys.exit(
                 f'ERROR: return type {type} does not match function return type {functionReturnType}')
-            raise SyntaxError
         else:
             self.functionNameMap[self.currFunction]['hasReturn'] = True
 
@@ -260,9 +257,20 @@ class FunctionTable(object):
         Verifies the function if not void, had a return statement
         '''
         if not self.functionNameMap[self.currFunction]['hasReturn'] and self.functionNameMap[self.currFunction]['returnType'] != 'void':
-            print(
+            sys.exit(
                 f'ERROR: function {self.currFunction} has no return statement')
-            raise SyntaxError
+
+    def setFunctionMap(self, map: dict) -> None:
+        '''
+        Function to set the function map from one previously created.
+        '''
+        self.functionNameMap = map
+
+    def setConstantTable(self, map: dict) -> None:
+        '''
+        Function to set the constant table from one previously created.
+        '''
+        self.constantTable = map
 
 
 class SemanticCube(object):
@@ -403,5 +411,4 @@ class SemanticCube(object):
                     if ans != 'err':
                         return ans
 
-        print(f'Error: semantic not recognized {leftOp} {symb} {rightOp}')
-        raise SyntaxError
+        sys.exit(f'Error: semantic not recognized {leftOp} {symb} {rightOp}')
