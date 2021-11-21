@@ -17,6 +17,7 @@ class Memory(object):
                                 "bool": [],
                                 "string": []}
         self.localMemoryStack = []
+        self.currentMemoryStack = []
         self.variableAddress = VariablesAddress()
 
     def getMemoryValue(self, address: int) -> any:
@@ -29,7 +30,7 @@ class Memory(object):
         elif addressInfo[0] == 'constant':
             return self.constantsMemory[addressInfo[1]][address - addressInfo[2]]
         else:
-            return self.localMemoryStack[-1][addressInfo[1]][address - addressInfo[2]]
+            return self.localMemoryStack[self.currentMemoryStack[-1]][addressInfo[1]][address - addressInfo[2]]
 
     def setMemoryValue(self, address: int, value: any) -> None:
         '''
@@ -42,8 +43,8 @@ class Memory(object):
             self.constantsMemory[addressInfo[1]
                                  ][address - addressInfo[2]] = value
         else:
-            self.localMemoryStack[-1][addressInfo[1]
-                                      ][address - addressInfo[2]] = value
+            self.localMemoryStack[self.currentMemoryStack[-1]][addressInfo[1]
+                                                               ][address - addressInfo[2]] = value
 
     def loadConstantsInMemory(self, constants: dict) -> None:
         '''
@@ -66,7 +67,7 @@ class Memory(object):
             elif type == 'bool':
                 value = bool(value)
 
-            self.constantsMemory[type][beginingAddress - address] = value
+            self.constantsMemory[type][address - beginingAddress] = value
 
     def loadGlobalsInMemory(self, globals: dict) -> None:
         '''
@@ -90,20 +91,30 @@ class Memory(object):
 
         self.localMemoryStack.append(memory)
 
-    def addLocalParameters(self, address: int, param: int) -> None:
+    def addLocalParameters(self, address: int, param: int, paramType: str) -> None:
         '''
         Adds value to a parameter.
         '''
-        addressInfo = self.variableAddress.getType(address)
         value = self.getMemoryValue(address)
-        self.localMemoryStack[-1][addressInfo[1]
-                                  ][param - 1] = value
+        self.localMemoryStack[-1][paramType][param] = value
 
     def deleteLocalMemory(self) -> None:
         '''
         Deletes the last local memory in the stack.
         '''
         self.localMemoryStack.pop()
+
+    def setCurrentMemory(self) -> None:
+        '''
+        Sets the current memory in the stack.
+        '''
+        self.currentMemoryStack.append(len(self.localMemoryStack) - 1)
+
+    def deleteCurrentMemory(self) -> None:
+        '''
+        Deletes the current memory in the stack.
+        '''
+        self.currentMemoryStack.pop()
 
     def printMemory(self) -> None:
         '''

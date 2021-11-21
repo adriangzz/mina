@@ -18,6 +18,7 @@ class ReadObjFile(object):
         self.variableAddress = VariablesAddress()
         self.memory = Memory()
         self.instructionsStack = []
+        self.currentFunctionCall = ""
 
     def readObjFile(self) -> None:
         '''
@@ -135,21 +136,26 @@ class ReadObjFile(object):
                 pass
             elif instruction == '16':
                 self.memory.deleteLocalMemory()
+                self.memory.deleteCurrentMemory()
                 iP = self.instructionsStack.pop()
                 iPChanged = True
             elif instruction == '17':
                 functionName = self.quads[iP - 1][3]
                 self.memory.addLocalMemory(
                     self.table.getFunction(functionName))
+                self.currentFunctionCall = functionName
             elif instruction == '18':
                 address = self.quads[iP - 1][2]
-                pNum = self.quads[iP - 1][3]
-                self.memory.addLocalParameters(address, pNum)
+                pNum = self.quads[iP - 1][3] - 1
+                paramType = self.table.getParameter(
+                    self.currentFunctionCall, pNum)
+                self.memory.addLocalParameters(address, pNum, paramType)
             elif instruction == '19':
                 function = self.quads[iP - 1][3]
 
                 iP += 1
                 self.instructionsStack.append(iP)
+                self.memory.setCurrentMemory()
                 iP = self.table.getFunctionStartingAddress(function)
                 iPChanged = True
             elif instruction == '20':
@@ -170,4 +176,5 @@ class ReadObjFile(object):
         self.memory.loadGlobalsInMemory(
             self.table.getFunction(data['programName']))
         self.memory.addLocalMemory(self.table.getFunction('main'))
+        self.memory.setCurrentMemory()
         self.memory.printMemory()

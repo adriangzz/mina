@@ -203,9 +203,9 @@ def p_call(p):
     quad.checkEndOfParameters()
     quad.createQuadGoSUB(p[1])
     returnType = table.getFunctionReturnType(p[1])
-
     if returnType != 'void':
         quad.setGlobalVarToTemp(p[1])
+    quad.push(')', "operator")
 
 
 def p_id_call(p):
@@ -213,6 +213,7 @@ def p_id_call(p):
     id_call : ID
 
     '''
+    quad.push('(', "operator")
     table.functionExists(p[1])
     quad.setCurrentFunctionCall(p[1])
     quad.createQuadEra(p[1])
