@@ -19,6 +19,7 @@ class ObjectFile(object):
         '''
         with open("obj.json", "w") as f:
             obj = {
+                'programName': self.table.getProgramName(),
                 'functionTable': self.table.getFunctions(),
                 'constantTable': self.table.getConstants(),
                 'quads': self.quads.getQuads()
