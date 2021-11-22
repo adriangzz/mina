@@ -34,14 +34,14 @@ class VariablesAddress(object):
         self.addressDict = deepcopy(self.addressDictDefault)
         self.currentScope = 'global'
 
-    def getTypeStartingAddress(self, scope: str, type: str) -> int:
+    def getTypeStartingAddress(self, scope: str, type: str, size: int = 1) -> int:
         '''
         Get the next available address depending on the scope and type.
         '''
         if scope in self.addressDictDefault:
             if type in self.addressDictDefault[scope]:
                 address = self.addressDict[scope][type]
-                self.addressDict[scope][type] += 1
+                self.addressDict[scope][type] += size
                 return address
 
     def getType(self, address: int) -> tuple:

@@ -32,7 +32,7 @@ class FunctionTable(object):
         else:
             sys.exit("Error: function name already in use")
 
-    def addVariables(self, row: dict, name: str = None) -> None:
+    def addVariables(self, row: dict, name: str = None, size: int = 1) -> None:
         '''
         Function to add variables to current function.
         Uses last added function as default, but an extra optional parameter with the name of the function is accepted.
@@ -46,7 +46,7 @@ class FunctionTable(object):
             sys.exit("Error: variable name '" +
                      row['name'] + "' already in use")
 
-        self.addSize(row['type'])
+        self.addSize(row['type'], size)
 
     def addParameters(self, type: str) -> None:
         '''
@@ -80,14 +80,14 @@ class FunctionTable(object):
             return self.functionNameMap[name]
         return {}
 
-    def addSize(self, type) -> None:
+    def addSize(self, type: str, size: int = 1) -> None:
         '''
-        Adds 1 to current function size.
+        Adds size given or 1 to current function size.
         '''
         if type in self.functionNameMap[self.currFunction]['size']:
-            self.functionNameMap[self.currFunction]['size'][type] += 1
+            self.functionNameMap[self.currFunction]['size'][type] += size
         else:
-            self.functionNameMap[self.currFunction]['size'][type] = 1
+            self.functionNameMap[self.currFunction]['size'][type] = size
 
     def getFunctions(self) -> dict:
         '''
