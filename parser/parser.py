@@ -186,9 +186,7 @@ def p_functions(p):
 
         # Verify function has return type if not void
         table.verifyHasReturn()
-        returnType = table.getFunctionReturnType(p[1])
-        if returnType == 'void':
-            quad.createQuadEndFunc()
+        quad.createQuadEndFunc()
         table.setCurrentFunction(table.getProgramName(), 'global')
 
 
