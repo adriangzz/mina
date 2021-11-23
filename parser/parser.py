@@ -71,6 +71,7 @@ def p_statue(p):
            | condition
            | while_condition
            | do_while_condition
+           | for_condition
            | read
            | write
            | return
@@ -100,11 +101,9 @@ def p_assign_id(p):
     # Get current type
     currType = table.getCurrentType()
 
-    # Get var name without brackets
-    varName = re.findall('_?[a-zA-Z][a-zA-Z0-9]*', p[1])[0]
     address = variableAddress.getTypeStartingAddress(
         table.getCurrentFunctionScope(), currType)
-    table.addVariables({'name': varName, 'type': currType, 'address': address})
+    table.addVariables({'name': p[1], 'type': currType, 'address': address})
 
 
 def p_assign_id_arr_1d(p):
@@ -116,12 +115,10 @@ def p_assign_id_arr_1d(p):
     # Get current type
     currType = table.getCurrentType()
 
-    # Get var name without brackets
-    varName = re.findall('_?[a-zA-Z][a-zA-Z0-9]*', p[1])[0]
     address = variableAddress.getTypeStartingAddress(
         table.getCurrentFunctionScope(), currType, limit)
     table.addVariables(
-        {'name': varName, 'type': currType, 'address': address, 'dim': {'limit': limit, 'k': 0}}, None, limit)
+        {'name': p[1], 'type': currType, 'address': address, 'dim': {'limit': limit, 'k': 0}}, None, limit)
 
 
 def p_assign_id_arr_2d(p):
@@ -137,12 +134,10 @@ def p_assign_id_arr_2d(p):
     # Get current type
     currType = table.getCurrentType()
 
-    # Get var name without brackets
-    varName = re.findall('_?[a-zA-Z][a-zA-Z0-9]*', p[1])[0]
     address = variableAddress.getTypeStartingAddress(
         table.getCurrentFunctionScope(), currType, size)
     table.addVariables(
-        {'name': varName, 'type': currType, 'address': address, 'dim': {'limit': limit1, 'm1': m1, 'next': {'limit': limit2, 'k': 0}}}, None, size)
+        {'name': p[1], 'type': currType, 'address': address, 'dim': {'limit': limit1, 'm1': m1, 'next': {'limit': limit2, 'k': 0}}}, None, size)
 
 
 def p_assign_id_arr_parameters(p):
@@ -152,11 +147,9 @@ def p_assign_id_arr_parameters(p):
     # Get current type
     currType = table.getCurrentType()
 
-    # Get var name without brackets
-    varName = re.findall('_?[a-zA-Z][a-zA-Z0-9]*', p[1])[0]
     address = variableAddress.getTypeStartingAddress(
         table.getCurrentFunctionScope(), currType)
-    table.addVariables({'name': varName, 'type': currType, 'address': address})
+    table.addVariables({'name': p[1], 'type': currType, 'address': address})
     table.addParameters(currType)
 
 
@@ -164,9 +157,7 @@ def p_id_arr(p):
     '''
     id_arr : ID
     '''
-    # Get var name without brackets
-    varName = re.findall('_?[a-zA-Z][a-zA-Z0-9]*', p[1])[0]
-    var = table.getVariable(varName)
+    var = table.getVariable(p[1])
 
     quad.push(var['address'], var['type'])
     quad.checkOperator(['*', '/'], False)
@@ -176,9 +167,7 @@ def p_id_arr_1d(p):
     '''
     id_arr : ID OPEN_SQUARE_BRACKET expression CLOSE_SQUARE_BRACKET
     '''
-    # Get var name without brackets
-    varName = re.findall('_?[a-zA-Z][a-zA-Z0-9]*', p[1])[0]
-    var = table.getVariable(varName)
+    var = table.getVariable(p[1])
     quad.createQuadVerifyLimit(var['dim']['limit'])
     quad.createQuadWithAddress(var['address'], var['type'])
 
@@ -390,9 +379,7 @@ def p_var_cte_ID(p):
     '''
     var_cte : ID
     '''
-    # Get var name without brackets
-    varName = re.findall('_?[a-zA-Z][a-zA-Z0-9]*', p[1])[0]
-    var = table.getVariable(varName)
+    var = table.getVariable(p[1])
 
     quad.push(var['address'], var['type'])
     quad.checkOperator(['*', '/'], False)
@@ -402,9 +389,7 @@ def p_var_cte_arr(p):
     '''
     var_cte : id_arr_call OPEN_SQUARE_BRACKET expression CLOSE_SQUARE_BRACKET
     '''
-    # Get var name without brackets
-    varName = re.findall('_?[a-zA-Z][a-zA-Z0-9]*', p[1])[0]
-    var = table.getVariable(varName)
+    var = table.getVariable(p[1])
     quad.createQuadVerifyLimit(var['dim']['limit'])
     quad.createQuadWithAddress(var['address'], var['type'])
 
@@ -480,8 +465,7 @@ def p_close_parenthesis_condition(p):
     '''
     close_parenthesis_condition : CLOSE_PARENTHESIS
     '''
-    quad.createQuadGoTo(
-        'GOTOF', False)
+    quad.createQuadGoTo('GOTOF', False)
 
 
 def p_close_parenthesis_do(p):
@@ -489,6 +473,46 @@ def p_close_parenthesis_do(p):
     close_parenthesis_do : CLOSE_PARENTHESIS
     '''
     quad.createQuadGoTo('GOTOT', True)
+
+
+def p_for_condition(p):
+    '''
+    for_condition : FOR OPEN_PARENTHESIS id_for EQUAL_ASSIGN assign_exp_for TO exp_for_to CLOSE_PARENTHESIS block_condition_for
+    '''
+
+
+def p_for_condition_id(p):
+    '''
+    id_for : ID
+    '''
+    var = table.getVariable(p[1])
+    if var['type'] == 'int':
+        quad.push(var['address'], var['type'])
+    else:
+        sys.exit("Error: for variable must be of type int")
+
+
+def p_assign_exp_for(p):
+    '''
+    assign_exp_for : expression
+    '''
+    quad.createQuadFor()
+
+
+def p_exp_for_to(p):
+    '''
+    exp_for_to : expression
+    '''
+    quad.createQuadForTo()
+    quad.createQuadGoTo('GOTOF', False)
+
+
+def p_block_condition_for(p):
+    '''
+    block_condition_for : block
+    '''
+    quad.createQuadAddOneToFor()
+    quad.updateQuadGoToWhile(0)
 
 
 def p_block_condition(p):

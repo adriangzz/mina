@@ -240,6 +240,62 @@ class Quadruples(object):
             self.appendQuad(type, None, None, None)
             self.appendGoTo(2)
 
+    def createQuadFor(self):
+        '''
+        Function to create quads for the for loop.
+        '''
+        expTuple = self.stackOperands.pop()
+        vControlTuple = self.stackOperands[-1]
+
+        expOperand = expTuple[0]
+        expOperandType = expTuple[1]
+        vControlOperand = vControlTuple[0]
+        vControlOperandType = vControlTuple[1]
+
+        if expOperandType != 'int':
+            sys.exit("Error: expression of for loop must return an int")
+
+        self.cube.getResult(
+            expOperandType, vControlOperandType, '=')
+
+        self.appendQuad('=', expOperand, None, vControlOperand)
+
+    def createQuadForTo(self):
+        '''
+        Function to create quads for the for to expression inside for loop.
+        '''
+        expTuple = self.stackOperands.pop()
+        vControlTuple = self.stackOperands[-1]
+
+        expOperand = expTuple[0]
+        expOperandType = expTuple[1]
+        vControlOperand = vControlTuple[0]
+        vControlOperandType = vControlTuple[1]
+
+        if expOperandType != 'int':
+            sys.exit("Error: expression of for loop must return an int")
+
+        resultType = self.cube.getResult(
+            expOperandType, vControlOperandType, '<')
+
+        temp = self.variableAddress.getTypeStartingAddress(
+            'local', 'temporal')
+        self.stackOperands.append((temp, resultType))
+        self.appendGoTo(1)
+        self.appendQuad('<', vControlOperand, expOperand, temp)
+        self.table.addSize('temporal')
+
+    def createQuadAddOneToFor(self):
+        '''
+        Function to add one to variable in for loop.
+        '''
+        expTuple = self.stackOperands.pop()
+
+        expOperand = expTuple[0]
+        expOperandType = expTuple[1]
+
+        self.appendQuad('+', expOperand, '*1', expOperand)
+
     def updateQuadGoTo(self, extra: int = 0) -> None:
         '''
         Gets the last go to in the stack and updates the counter in it with the global quad counter.
