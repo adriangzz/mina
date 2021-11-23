@@ -42,6 +42,8 @@ class Quadruples(object):
             'GOSUB': '19',
             '=': '20',
             'VER': '21',
+            '&': '22',
+            '|': '23',
         }
 
     def push(self, o: str, type: str) -> None:

@@ -216,6 +216,32 @@ class ReadObjFile(object):
                 limit = self.quads[iP - 1][3]
                 if data1 < 0 or data1 >= limit:
                     sys.exit('Error: trying to access index out of bounds')
+
+            elif instruction == '22':
+                data1 = self.quads[iP - 1][1]
+                if isinstance(data1, str):
+                    if data1[0] == '*':
+                        data1 = int(data1[1:])
+                    else:
+                        data1 = int(data1[1:])
+                        data1 = self.memory.getMemoryValue(data1)
+                        data1 = self.memory.getMemoryValue(data1)
+                else:
+                    data1 = self.memory.getMemoryValue(data1)
+
+                data2 = self.quads[iP - 1][2]
+                if isinstance(data2, str):
+                    if data2[0] == '*':
+                        data2 = int(data2[1:])
+                    else:
+                        data2 = int(data2[1:])
+                        data2 = self.memory.getMemoryValue(data2)
+                        data2 = self.memory.getMemoryValue(data2)
+                else:
+                    data2 = self.memory.getMemoryValue(data2)
+                aux = data1 and data2
+                address = self.quads[iP - 1][3]
+                self.memory.setMemoryValue(address, aux)
             else:
                 pass
 

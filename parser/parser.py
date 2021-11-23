@@ -518,8 +518,9 @@ def p_expression(p):
     expression : exp
                | string 
                | exp comparison exp 
+               | expression logical expression 
     '''
-    quad.checkOperator(['>', '<', '>=', '<=', '==', '!='], False)
+    quad.checkOperator(['>', '<', '>=', '<=', '==', '!=', '&', '|'], False)
 
 
 def p_string(p):
@@ -539,11 +540,19 @@ def p_string(p):
 def p_comparison(p):
     '''
     comparison : GREATER_THAN
-    comparison : GREATER_THAN_EQUAL
+               | GREATER_THAN_EQUAL
                | LESS_THAN
                | LESS_THAN_EQUAL
                | NOT_EQUAL
                | EQUAL
+    '''
+    quad.push(p[1], "operator")
+
+
+def p_logical(p):
+    '''
+    logical : AND
+            | OR
     '''
     quad.push(p[1], "operator")
 

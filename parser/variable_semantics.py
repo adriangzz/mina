@@ -287,6 +287,7 @@ class SemanticCube(object):
                     "/": "int",
                     "<": "bool",
                     "=": "int",
+                    "&": "bool",
                 },
                 "float": {
                     "+": "float",
@@ -305,6 +306,7 @@ class SemanticCube(object):
                     "/": "err",
                     "<": "err",
                     "=": "err",
+                    "&": "bool",
                 },
 
             },
@@ -368,6 +370,7 @@ class SemanticCube(object):
                     "/": "err",
                     "<": "err",
                     "=": "bool",
+                    "&": "bool",
                 },
                 "float": {
                     "+": "err",
@@ -386,6 +389,7 @@ class SemanticCube(object):
                     "/": "err",
                     "<": "err",
                     "=": "bool",
+                    "&": "bool",
                 },
 
             },
@@ -402,6 +406,8 @@ class SemanticCube(object):
             symb = '/'
         elif symb == '<' or symb == '>' or symb == '>=' or symb == '<=' or symb == '==' or symb == '!=':
             symb = '<'
+        elif symb == '&' or symb == '|':
+            symb = '&'
 
         if leftOp in self.cube:
             if rightOp in self.cube[leftOp]:
