@@ -158,7 +158,12 @@ class ReadObjFile(object):
                 print(data1)
             elif instruction == '15':
                 address = self.quads[iP - 1][3]
-                type = self.variableAddress.getType(address)[1]
+                if isinstance(address, str):
+                    address = int(address[1:])
+                    address = self.memory.getMemoryValue(address)
+                    type = self.variableAddress.getType(address)[1]
+                else:
+                    type = self.variableAddress.getType(address)[1]
                 aux = input()
                 if type == 'int':
                     aux = int(aux)
