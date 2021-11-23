@@ -1,5 +1,6 @@
 import json
 import sys
+import os
 from re import I
 from parser.variable_address import VariablesAddress
 
@@ -249,6 +250,10 @@ class ReadObjFile(object):
                 iP += 1
 
     def loadData(self, data: map) -> None:
+        '''
+        Function to load data map into its tables.
+        Creates the memory for global variables, constants and main function.
+        '''
         self.table.setFunctionMap(data['functionTable'])
         self.table.setConstantTable(data['constantTable'])
         self.quads = data['quads']
@@ -258,3 +263,9 @@ class ReadObjFile(object):
         self.memory.addLocalMemory(self.table.getFunction('main'))
         self.memory.setCurrentMemory()
         self.memory.printMemory()
+
+    def deleteObjFile(self) -> None:
+        '''
+        Function to delete object file after use.
+        '''
+        os.remove(self.fileName)

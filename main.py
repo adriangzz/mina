@@ -9,5 +9,6 @@ if __name__ == '__main__':
         parseFile(user_input)
         read = ReadObjFile()
         read.readObjFile()
+        read.deleteObjFile()
     else:
         sys.exit("ERROR: Should be provided with only one file name as argument")
