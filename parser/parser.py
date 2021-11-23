@@ -93,10 +93,9 @@ def p_vars_type(p):
     '''
 
 
-def p_assign_id_arr(p):
+def p_assign_id(p):
     '''
     assign_id_arr : ID
-                  | ARRAY
     '''
     # Get current type
     currType = table.getCurrentType()
@@ -108,10 +107,47 @@ def p_assign_id_arr(p):
     table.addVariables({'name': varName, 'type': currType, 'address': address})
 
 
+def p_assign_id_arr_1d(p):
+    '''
+    assign_id_arr : ID OPEN_SQUARE_BRACKET INT CLOSE_SQUARE_BRACKET
+    '''
+    limit = p[3]
+
+    # Get current type
+    currType = table.getCurrentType()
+
+    # Get var name without brackets
+    varName = re.findall('_?[a-zA-Z][a-zA-Z0-9]*', p[1])[0]
+    address = variableAddress.getTypeStartingAddress(
+        table.getCurrentFunctionScope(), currType, limit)
+    table.addVariables(
+        {'name': varName, 'type': currType, 'address': address, 'dim': {'limit': limit, 'k': 0}}, None, limit)
+
+
+def p_assign_id_arr_2d(p):
+    '''
+    assign_id_arr : ID OPEN_SQUARE_BRACKET INT CLOSE_SQUARE_BRACKET OPEN_SQUARE_BRACKET INT CLOSE_SQUARE_BRACKET
+    '''
+    limit1 = p[3]
+    limit2 = p[6]
+
+    size = limit1 * limit2
+    m1 = size / limit1
+
+    # Get current type
+    currType = table.getCurrentType()
+
+    # Get var name without brackets
+    varName = re.findall('_?[a-zA-Z][a-zA-Z0-9]*', p[1])[0]
+    address = variableAddress.getTypeStartingAddress(
+        table.getCurrentFunctionScope(), currType, size)
+    table.addVariables(
+        {'name': varName, 'type': currType, 'address': address, 'dim': {'limit': limit1, 'm1': m1, 'next': {'limit': limit2, 'k': 0}}}, None, size)
+
+
 def p_assign_id_arr_parameters(p):
     '''
     assign_id_arr_param : ID
-                        | ARRAY
     '''
     # Get current type
     currType = table.getCurrentType()
@@ -127,13 +163,25 @@ def p_assign_id_arr_parameters(p):
 def p_id_arr(p):
     '''
     id_arr : ID
-           | ARRAY
     '''
     # Get var name without brackets
     varName = re.findall('_?[a-zA-Z][a-zA-Z0-9]*', p[1])[0]
     var = table.getVariable(varName)
 
     quad.push(var['address'], var['type'])
+    quad.checkOperator(['*', '/'], False)
+
+
+def p_id_arr_1d(p):
+    '''
+    id_arr : ID OPEN_SQUARE_BRACKET expression CLOSE_SQUARE_BRACKET
+    '''
+    # Get var name without brackets
+    varName = re.findall('_?[a-zA-Z][a-zA-Z0-9]*', p[1])[0]
+    var = table.getVariable(varName)
+    quad.createQuadVerifyLimit(var['dim']['limit'])
+    quad.createQuadWithAddress(var['address'], var['type'])
+
     quad.checkOperator(['*', '/'], False)
 
 
@@ -341,7 +389,6 @@ def p_char(p):
 def p_var_cte_ID(p):
     '''
     var_cte : ID
-            | ARRAY 
     '''
     # Get var name without brackets
     varName = re.findall('_?[a-zA-Z][a-zA-Z0-9]*', p[1])[0]
@@ -349,6 +396,28 @@ def p_var_cte_ID(p):
 
     quad.push(var['address'], var['type'])
     quad.checkOperator(['*', '/'], False)
+
+
+def p_var_cte_arr(p):
+    '''
+    var_cte : id_arr_call OPEN_SQUARE_BRACKET expression CLOSE_SQUARE_BRACKET
+    '''
+    # Get var name without brackets
+    varName = re.findall('_?[a-zA-Z][a-zA-Z0-9]*', p[1])[0]
+    var = table.getVariable(varName)
+    quad.createQuadVerifyLimit(var['dim']['limit'])
+    quad.createQuadWithAddress(var['address'], var['type'])
+
+    quad.checkOperator(['*', '/'], False)
+    quad.push(')', "operator")
+
+
+def p_var_cte_arr_id(p):
+    '''
+    id_arr_call : ID
+    '''
+    quad.push('(', "operator")
+    p[0] = p[1]
 
 
 def p_multiply_divide(p):

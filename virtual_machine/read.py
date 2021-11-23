@@ -1,4 +1,5 @@
 import json
+import sys
 from re import I
 from parser.variable_address import VariablesAddress
 
@@ -22,7 +23,7 @@ class ReadObjFile(object):
 
     def readObjFile(self) -> None:
         '''
-        Function to parse object file and generate 
+        Function to parse object file and generate
         function and constant variables and to store the quads.
         '''
         with open(self.fileName) as json_file:
@@ -31,16 +32,32 @@ class ReadObjFile(object):
 
         iP = 1
         instruction = ""
-
         while(iP <= len(self.quads)):
             instruction = self.quads[iP - 1][0]
             iPChanged = False
 
             if instruction == '1':
-                data1 = self.memory.getMemoryValue(
-                    self.quads[iP - 1][1])
-                data2 = self.memory.getMemoryValue(
-                    self.quads[iP - 1][2])
+                data1 = self.quads[iP - 1][1]
+                if isinstance(data1, str):
+                    if data1[0] == '*':
+                        data1 = int(data1[1:])
+                    else:
+                        data1 = int(data1[1:])
+                        data1 = self.memory.getMemoryValue(data1)
+                        data1 = self.memory.getMemoryValue(data1)
+                else:
+                    data1 = self.memory.getMemoryValue(data1)
+
+                data2 = self.quads[iP - 1][2]
+                if isinstance(data2, str):
+                    if data2[0] == '*':
+                        data2 = int(data2[1:])
+                    else:
+                        data2 = int(data2[1:])
+                        data2 = self.memory.getMemoryValue(data2)
+                        data2 = self.memory.getMemoryValue(data2)
+                else:
+                    data2 = self.memory.getMemoryValue(data2)
                 aux = data1 + data2
                 address = self.quads[iP - 1][3]
                 self.memory.setMemoryValue(address, aux)
@@ -130,7 +147,13 @@ class ReadObjFile(object):
                     iP = self.quads[iP - 1][3]
                     iPChanged = True
             elif instruction == '14':
-                data1 = self.memory.getMemoryValue(self.quads[iP - 1][3])
+                data1 = self.quads[iP - 1][3]
+                if isinstance(data1, str):
+                    data1 = int(data1[1:])
+                    data1 = self.memory.getMemoryValue(data1)
+                    data1 = self.memory.getMemoryValue(data1)
+                else:
+                    data1 = self.memory.getMemoryValue(data1)
                 print(data1)
             elif instruction == '15':
                 address = self.quads[iP - 1][3]
@@ -168,9 +191,31 @@ class ReadObjFile(object):
                 iP = self.table.getFunctionStartingAddress(function)
                 iPChanged = True
             elif instruction == '20':
-                data1 = self.memory.getMemoryValue(self.quads[iP - 1][1])
+                data1 = self.quads[iP - 1][1]
+                if isinstance(data1, str):
+                    data1 = int(data1[1:])
+                    data1 = self.memory.getMemoryValue(data1)
+                    data1 = self.memory.getMemoryValue(data1)
+                else:
+                    data1 = self.memory.getMemoryValue(data1)
+
                 address = self.quads[iP - 1][3]
+                if isinstance(address, str):
+                    address = int(address[1:])
+                    address = self.memory.getMemoryValue(address)
+
                 self.memory.setMemoryValue(address, data1)
+            elif instruction == '21':
+                data1 = self.quads[iP - 1][1]
+                if isinstance(data1, str):
+                    data1 = int(data1[1:])
+                    data1 = self.memory.getMemoryValue(data1)
+                    data1 = self.memory.getMemoryValue(data1)
+                else:
+                    data1 = self.memory.getMemoryValue(data1)
+                limit = self.quads[iP - 1][3]
+                if data1 < 0 or data1 >= limit:
+                    sys.exit('Error: trying to access index out of bounds')
             else:
                 pass
 

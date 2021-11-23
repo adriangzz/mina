@@ -41,6 +41,7 @@ class Quadruples(object):
             'PARAM': '18',
             'GOSUB': '19',
             '=': '20',
+            'VER': '21',
         }
 
     def push(self, o: str, type: str) -> None:
@@ -128,6 +129,28 @@ class Quadruples(object):
         globalVar = self.table.getVariable(functionName)
 
         self.appendQuad(type, rightOperand, None, globalVar['address'])
+
+    def createQuadVerifyLimit(self, limit: int) -> None:
+        '''
+        Creates a quadruple to verify the index is within limits of the array.
+        '''
+        rightOperandTuple = self.stackOperands[-1]
+        rightOperand = rightOperandTuple[0]
+
+        self.appendQuad('VER', rightOperand, 0, limit)
+
+    def createQuadWithAddress(self, address: int, type: str) -> None:
+        '''
+        Creates a quadruple to add the variable address.
+        '''
+        rightOperandTuple = self.stackOperands.pop()
+        rightOperand = rightOperandTuple[0]
+
+        temp = self.variableAddress.getTypeStartingAddress(
+            'local', 'temporal')
+        self.stackOperands.append(('(' + str(temp), 'int'))
+        self.appendQuad('+', rightOperand, '*' + str(address), temp)
+        self.table.addSize('temporal')
 
     def setGlobalVarToTemp(self, name: str) -> None:
         '''
