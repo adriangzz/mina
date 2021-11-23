@@ -40,6 +40,8 @@ tokens = [
     'GREATER_THAN_EQUAL',
     'NOT_EQUAL',
     'EQUAL',
+    'AND',
+    'OR',
     'SEMICOLON',
     'COLON',
     'COMMA',
@@ -66,6 +68,8 @@ t_LESS_THAN_EQUAL = r'\<='
 t_GREATER_THAN = r'\>'
 t_GREATER_THAN_EQUAL = r'\>='
 t_NOT_EQUAL = r'\<>'
+t_AND = r'\&'
+t_OR = r'\|'
 
 t_PLUS = r'\+'
 t_MINUS = r'\-'
@@ -89,6 +93,8 @@ def t_INT(t):
 
 
 t_ignore = ' \t'
+
+t_ignore_COMMENT = r'//.*'
 
 
 def t_ID(t):
