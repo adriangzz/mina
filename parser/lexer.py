@@ -31,7 +31,9 @@ tokens = [
     'OPEN_BRACKET',
     'CLOSE_BRACKET',
     'OPEN_PARENTHESIS',
+    'OPEN_SQUARE_BRACKET',
     'CLOSE_PARENTHESIS',
+    'CLOSE_SQUARE_BRACKET',
     'LESS_THAN',
     'LESS_THAN_EQUAL',
     'GREATER_THAN',
@@ -43,7 +45,6 @@ tokens = [
     'COMMA',
     'STRING',
     'CHAR',
-    'ARRAY',
     'ID',
 ] + list(reserved.values())
 
@@ -55,6 +56,8 @@ t_OPEN_BRACKET = r'\{'
 t_CLOSE_BRACKET = r'\}'
 t_OPEN_PARENTHESIS = r'\('
 t_CLOSE_PARENTHESIS = r'\)'
+t_OPEN_SQUARE_BRACKET = r'\['
+t_CLOSE_SQUARE_BRACKET = r'\]'
 
 t_EQUAL = r'\=='
 t_EQUAL_ASSIGN = r'\='
@@ -86,12 +89,6 @@ def t_INT(t):
 
 
 t_ignore = ' \t'
-
-
-def t_ARRAY(t):
-    r'_?[a-zA-Z][a-zA-Z0-9]*(\[\d+\])'
-    t.type = reserved.get(t.value, 'ARRAY')    # Check for reserved words
-    return t
 
 
 def t_ID(t):
