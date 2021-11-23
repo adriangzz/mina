@@ -60,9 +60,15 @@ main() {
 
     // While loop
     while (a < 5) {
-        print("This will print until a is less than 5!");
+        print("This will print until a is more than 5!");
         a = a + 1;
     }
+
+    // Do-while loop
+    do {
+        print("This will print until a is more than 5!");
+        a = a + 1;
+    } while (a < 5)
 
     // For loop
     for (a = 1 to 6) {
