@@ -61,18 +61,18 @@ main() {
     if (5 < 3) {
         print("This will not print :( ");
     } else {
-        print("This will print!", "Also this!");
+        print("This will print!");
     }
 
     // While loop
     while (a < 5) {
-        print("This will print until a is more than 5!");
+        print("This will print until 'a' is more than 5!");
         a = a + 1;
     }
 
     // Do-while loop
     do {
-        print("This will print until a is more than 5!");
+        print("This will print until 'a' is more than 5!");
         a = a + 1;
     } while (a < 5)
 
