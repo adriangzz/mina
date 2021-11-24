@@ -5,7 +5,7 @@ import sys
 class FunctionTable(object):
     '''
     Class to keep variable semantics.
-    Created using a dictionary of dictionaries that stores the names of the functions as keys for O(N) search time
+    Created using a dictionary of dictionaries that stores the names of the functions as keys for O(1) search time
     and the rest of the values as a dictionary. e.j. {'funcName':{'name':'funcName','type':'int',...}}.
     Stores the latest added function name to add all the next variables to that scope.
     Variables are added to a new table added as a value to the function dictionary.
