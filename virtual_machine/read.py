@@ -413,7 +413,6 @@ class ReadObjFile(object):
             self.table.getFunction(data['programName']))
         self.memory.addLocalMemory(self.table.getFunction('main'))
         self.memory.setCurrentMemory()
-        self.memory.printMemory()
 
     def deleteObjFile(self) -> None:
         '''
