@@ -73,7 +73,7 @@ t_LESS_THAN = r'\<'
 t_LESS_THAN_EQUAL = r'\<='
 t_GREATER_THAN = r'\>'
 t_GREATER_THAN_EQUAL = r'\>='
-t_NOT_EQUAL = r'\<>'
+t_NOT_EQUAL = r'\!='
 t_AND = r'\&'
 t_OR = r'\|'
 

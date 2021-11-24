@@ -40,6 +40,8 @@ class ReadObjFile(object):
 
             if instruction == '1':
                 data1 = self.quads[iP - 1][1]
+                data2 = self.quads[iP - 1][2]
+
                 if isinstance(data1, str):
                     if data1[0] == '*':
                         data1 = int(data1[1:])
@@ -50,7 +52,6 @@ class ReadObjFile(object):
                 else:
                     data1 = self.memory.getMemoryValue(data1)
 
-                data2 = self.quads[iP - 1][2]
                 if isinstance(data2, str):
                     if data2[0] == '*':
                         data2 = int(data2[1:])
@@ -60,6 +61,7 @@ class ReadObjFile(object):
                         data2 = self.memory.getMemoryValue(data2)
                 else:
                     data2 = self.memory.getMemoryValue(data2)
+
                 aux = data1 + data2
                 address = self.quads[iP - 1][3]
                 self.memory.setMemoryValue(address, aux)
@@ -88,50 +90,128 @@ class ReadObjFile(object):
                 address = self.quads[iP - 1][3]
                 self.memory.setMemoryValue(address, aux)
             elif instruction == '5':
-                data1 = self.memory.getMemoryValue(
-                    self.quads[iP - 1][1])
-                data2 = self.memory.getMemoryValue(
-                    self.quads[iP - 1][2])
+                data1 = self.quads[iP - 1][1]
+                data2 = self.quads[iP - 1][2]
+
+                if isinstance(data1, str):
+                    data1 = int(data1[1:])
+                    data1 = self.memory.getMemoryValue(data1)
+                    data1 = self.memory.getMemoryValue(data1)
+                else:
+                    data1 = self.memory.getMemoryValue(data1)
+
+                if isinstance(data2, str):
+                    data2 = int(data2[1:])
+                    data2 = self.memory.getMemoryValue(data2)
+                    data2 = self.memory.getMemoryValue(data2)
+                else:
+                    data2 = self.memory.getMemoryValue(data2)
+
                 aux = data1 < data2
                 address = self.quads[iP - 1][3]
                 self.memory.setMemoryValue(address, aux)
             elif instruction == '6':
-                data1 = self.memory.getMemoryValue(
-                    self.quads[iP - 1][1])
-                data2 = self.memory.getMemoryValue(
-                    self.quads[iP - 1][2])
+                data1 = self.quads[iP - 1][1]
+                data2 = self.quads[iP - 1][2]
+
+                if isinstance(data1, str):
+                    data1 = int(data1[1:])
+                    data1 = self.memory.getMemoryValue(data1)
+                    data1 = self.memory.getMemoryValue(data1)
+                else:
+                    data1 = self.memory.getMemoryValue(data1)
+
+                if isinstance(data2, str):
+                    data2 = int(data2[1:])
+                    data2 = self.memory.getMemoryValue(data2)
+                    data2 = self.memory.getMemoryValue(data2)
+                else:
+                    data2 = self.memory.getMemoryValue(data2)
+
                 aux = data1 > data2
                 address = self.quads[iP - 1][3]
                 self.memory.setMemoryValue(address, aux)
             elif instruction == '7':
-                data1 = self.memory.getMemoryValue(
-                    self.quads[iP - 1][1])
-                data2 = self.memory.getMemoryValue(
-                    self.quads[iP - 1][2])
+                data1 = self.quads[iP - 1][1]
+                data2 = self.quads[iP - 1][2]
+
+                if isinstance(data1, str):
+                    data1 = int(data1[1:])
+                    data1 = self.memory.getMemoryValue(data1)
+                    data1 = self.memory.getMemoryValue(data1)
+                else:
+                    data1 = self.memory.getMemoryValue(data1)
+
+                if isinstance(data2, str):
+                    data2 = int(data2[1:])
+                    data2 = self.memory.getMemoryValue(data2)
+                    data2 = self.memory.getMemoryValue(data2)
+                else:
+                    data2 = self.memory.getMemoryValue(data2)
+
                 aux = data1 <= data2
                 address = self.quads[iP - 1][3]
                 self.memory.setMemoryValue(address, aux)
             elif instruction == '8':
-                data1 = self.memory.getMemoryValue(
-                    self.quads[iP - 1][1])
-                data2 = self.memory.getMemoryValue(
-                    self.quads[iP - 1][2])
+                data1 = self.quads[iP - 1][1]
+                data2 = self.quads[iP - 1][2]
+
+                if isinstance(data1, str):
+                    data1 = int(data1[1:])
+                    data1 = self.memory.getMemoryValue(data1)
+                    data1 = self.memory.getMemoryValue(data1)
+                else:
+                    data1 = self.memory.getMemoryValue(data1)
+
+                if isinstance(data2, str):
+                    data2 = int(data2[1:])
+                    data2 = self.memory.getMemoryValue(data2)
+                    data2 = self.memory.getMemoryValue(data2)
+                else:
+                    data2 = self.memory.getMemoryValue(data2)
+
                 aux = data1 >= data2
                 address = self.quads[iP - 1][3]
                 self.memory.setMemoryValue(address, aux)
             elif instruction == '9':
-                data1 = self.memory.getMemoryValue(
-                    self.quads[iP - 1][1])
-                data2 = self.memory.getMemoryValue(
-                    self.quads[iP - 1][2])
+                data1 = self.quads[iP - 1][1]
+                data2 = self.quads[iP - 1][2]
+
+                if isinstance(data1, str):
+                    data1 = int(data1[1:])
+                    data1 = self.memory.getMemoryValue(data1)
+                    data1 = self.memory.getMemoryValue(data1)
+                else:
+                    data1 = self.memory.getMemoryValue(data1)
+
+                if isinstance(data2, str):
+                    data2 = int(data2[1:])
+                    data2 = self.memory.getMemoryValue(data2)
+                    data2 = self.memory.getMemoryValue(data2)
+                else:
+                    data2 = self.memory.getMemoryValue(data2)
+
                 aux = data1 == data2
                 address = self.quads[iP - 1][3]
                 self.memory.setMemoryValue(address, aux)
             elif instruction == '10':
-                data1 = self.memory.getMemoryValue(
-                    self.quads[iP - 1][1])
-                data2 = self.memory.getMemoryValue(
-                    self.quads[iP - 1][2])
+                data1 = self.quads[iP - 1][1]
+                data2 = self.quads[iP - 1][2]
+
+                if isinstance(data1, str):
+                    data1 = int(data1[1:])
+                    data1 = self.memory.getMemoryValue(data1)
+                    data1 = self.memory.getMemoryValue(data1)
+                else:
+                    data1 = self.memory.getMemoryValue(data1)
+
+                if isinstance(data2, str):
+                    data2 = int(data2[1:])
+                    data2 = self.memory.getMemoryValue(data2)
+                    data2 = self.memory.getMemoryValue(data2)
+                else:
+                    data2 = self.memory.getMemoryValue(data2)
+
                 aux = data1 != data2
                 address = self.quads[iP - 1][3]
                 self.memory.setMemoryValue(address, aux)
@@ -312,7 +392,7 @@ class ReadObjFile(object):
 
                 for i in range(size):
                     arr.append(self.memory.getMemoryValue(address + i))
-                aux = statistics(arr)
+                aux = statistics.variance(arr)
                 self.memory.setMemoryValue(addressTemp, aux)
             else:
                 pass
@@ -333,6 +413,7 @@ class ReadObjFile(object):
             self.table.getFunction(data['programName']))
         self.memory.addLocalMemory(self.table.getFunction('main'))
         self.memory.setCurrentMemory()
+        self.memory.printMemory()
 
     def deleteObjFile(self) -> None:
         '''
