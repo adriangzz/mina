@@ -88,6 +88,7 @@ main() {
     // median(arr)
     // mode(arr)
     // variance(arr)
+    // plot(arr1, arr2)
 }
 ```
 

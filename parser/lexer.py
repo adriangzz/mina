@@ -24,6 +24,7 @@ reserved = {
     'median': 'MEDIAN',
     'mode': 'MODE',
     'variance': 'VARIANCE',
+    'plot': 'PLOT',
 }
 
 tokens = [

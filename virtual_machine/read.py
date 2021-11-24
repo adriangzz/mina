@@ -2,6 +2,7 @@ import json
 import sys
 import os
 import statistics
+import matplotlib.pyplot as plt
 from re import I
 from parser.variable_address import VariablesAddress
 
@@ -394,6 +395,20 @@ class ReadObjFile(object):
                     arr.append(self.memory.getMemoryValue(address + i))
                 aux = statistics.variance(arr)
                 self.memory.setMemoryValue(addressTemp, aux)
+
+            elif instruction == '28':
+                arr1 = []
+                arr2 = []
+                address1 = self.quads[iP - 1][1]
+                address2 = self.quads[iP - 1][2]
+                size = self.quads[iP - 1][3]
+
+                for i in range(size):
+                    arr1.append(self.memory.getMemoryValue(address1 + i))
+                    arr2.append(self.memory.getMemoryValue(address2 + i))
+
+                plt.scatter(arr1, arr2)
+                plt.show()
             else:
                 pass
 

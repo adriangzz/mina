@@ -48,6 +48,7 @@ class Quadruples(object):
             'median': '25',
             'mode': '26',
             'variance': '27',
+            'plot': '28',
         }
 
     def push(self, o: str, type: str) -> None:
@@ -314,6 +315,13 @@ class Quadruples(object):
         self.table.addSize('temporal')
 
         self.appendQuad(func, address, size, temp)
+
+    def createQuadSpecialFuncPlot(self, func: str, address1: int, address2: int, size: int):
+        '''
+        Function to add one to variable in for loop.
+        '''
+
+        self.appendQuad(func, address1, address2, size)
 
     def updateQuadGoTo(self, extra: int = 0) -> None:
         '''

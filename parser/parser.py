@@ -75,6 +75,7 @@ def p_statue(p):
            | write
            | return
            | call SEMICOLON
+           | special_function_call SEMICOLON
     '''
 
 
@@ -416,6 +417,26 @@ def p_special_functions(p):
 
     quad.createQuadSpecialFunc(
         p[1], var['address'], var['type'], var['dim']['limit'])
+
+
+def p_special_function_call(p):
+    '''
+    special_function_call : PLOT OPEN_PARENTHESIS ID COMMA ID CLOSE_PARENTHESIS
+    '''
+    var1 = table.getVariable(p[3])
+    var2 = table.getVariable(p[5])
+
+    if 'dim' not in var1 or 'dim' not in var2:
+        sys.error("Error: Statistic functions must recieve an array as parameter")
+
+    if var1['type'] != 'float' and var1['type'] != 'int' or var2['type'] != 'float' and var2['type'] != 'int':
+        sys.exit("Error: array must be of type int or float")
+
+    if var1['dim']['limit'] != var2['dim']['limit']:
+        sys.error("Error: Both arrays must be of the same size")
+
+    quad.createQuadSpecialFuncPlot(
+        p[1], var1['address'], var2['address'], var1['dim']['limit'])
 
 
 def p_multiply_divide(p):
