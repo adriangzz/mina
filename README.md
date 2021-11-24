@@ -81,8 +81,9 @@ main() {
         print("This will print 5 times");
     }
 
-    // Statistic functions
-    // Several statistic functions are included, they take the name of an  // array as a parameter
+    // Statistical functions
+    // Several statistical functions are included, they take the name of
+    // an array as a parameter
     // mean(arr)
     // median(arr)
     // mode(arr)
