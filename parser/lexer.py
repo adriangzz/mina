@@ -49,7 +49,6 @@ tokens = [
     'AND',
     'OR',
     'SEMICOLON',
-    'COLON',
     'COMMA',
     'STRING',
     'CHAR',
@@ -57,7 +56,6 @@ tokens = [
 ] + list(reserved.values())
 
 t_SEMICOLON = r';'
-t_COLON = r':'
 t_COMMA = r','
 
 t_OPEN_BRACKET = r'\{'

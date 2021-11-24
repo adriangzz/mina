@@ -553,7 +553,6 @@ def p_condition_else(p):
 def p_expression(p):
     '''
     expression : exp
-               | string 
                | exp comparison exp 
                | expression logical expression 
     '''
