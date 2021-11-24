@@ -4,7 +4,6 @@ from parser.obj_file import ObjectFile
 from parser.quadruples import Quadruples
 from parser.variable_address import VariablesAddress
 from parser.variable_semantics import FunctionTable
-import re
 import sys
 
 table = FunctionTable()
@@ -293,6 +292,7 @@ def p_factor(p):
            | plus_minus var_cte
            | var_cte
            | call
+           | special_functions
     '''
 
 
@@ -401,6 +401,21 @@ def p_var_cte_arr_id(p):
     '''
     quad.push('(', "operator")
     p[0] = p[1]
+
+
+def p_special_functions(p):
+    '''
+    special_functions : MEAN OPEN_PARENTHESIS ID CLOSE_PARENTHESIS
+                      | MEDIAN OPEN_PARENTHESIS ID CLOSE_PARENTHESIS
+                      | MODE OPEN_PARENTHESIS ID CLOSE_PARENTHESIS
+                      | VARIANCE OPEN_PARENTHESIS ID CLOSE_PARENTHESIS
+    '''
+    var = table.getVariable(p[3])
+    if 'dim' not in var:
+        sys.error("Error: Statistic functions must recieve an array as parameter")
+
+    quad.createQuadSpecialFunc(
+        p[1], var['address'], var['type'], var['dim']['limit'])
 
 
 def p_multiply_divide(p):
@@ -669,7 +684,7 @@ def parseFile(file):
     obj_file.create()
 
     # Print object file
-    obj_file.print()
+    # obj_file.print()
 
     # Delete table
     table.deleteTable()

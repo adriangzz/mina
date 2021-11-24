@@ -1,6 +1,7 @@
 import json
 import sys
 import os
+import statistics
 from re import I
 from parser.variable_address import VariablesAddress
 
@@ -248,6 +249,71 @@ class ReadObjFile(object):
                 aux = data1 and data2
                 address = self.quads[iP - 1][3]
                 self.memory.setMemoryValue(address, aux)
+            elif instruction == '23':
+                data1 = self.quads[iP - 1][1]
+                if isinstance(data1, str):
+                    if data1[0] == '*':
+                        data1 = int(data1[1:])
+                    else:
+                        data1 = int(data1[1:])
+                        data1 = self.memory.getMemoryValue(data1)
+                        data1 = self.memory.getMemoryValue(data1)
+                else:
+                    data1 = self.memory.getMemoryValue(data1)
+
+                data2 = self.quads[iP - 1][2]
+                if isinstance(data2, str):
+                    if data2[0] == '*':
+                        data2 = int(data2[1:])
+                    else:
+                        data2 = int(data2[1:])
+                        data2 = self.memory.getMemoryValue(data2)
+                        data2 = self.memory.getMemoryValue(data2)
+                else:
+                    data2 = self.memory.getMemoryValue(data2)
+                aux = data1 or data2
+                address = self.quads[iP - 1][3]
+                self.memory.setMemoryValue(address, aux)
+            elif instruction == '24':
+                arr = []
+                address = self.quads[iP - 1][1]
+                addressTemp = self.quads[iP - 1][3]
+                size = self.quads[iP - 1][2]
+
+                for i in range(size):
+                    arr.append(self.memory.getMemoryValue(address + i))
+                aux = statistics.mean(arr)
+                self.memory.setMemoryValue(addressTemp, aux)
+            elif instruction == '25':
+                arr = []
+                address = self.quads[iP - 1][1]
+                addressTemp = self.quads[iP - 1][3]
+                size = self.quads[iP - 1][2]
+
+                for i in range(size):
+                    arr.append(self.memory.getMemoryValue(address + i))
+                aux = statistics.median(arr)
+                self.memory.setMemoryValue(addressTemp, aux)
+            elif instruction == '26':
+                arr = []
+                address = self.quads[iP - 1][1]
+                addressTemp = self.quads[iP - 1][3]
+                size = self.quads[iP - 1][2]
+
+                for i in range(size):
+                    arr.append(self.memory.getMemoryValue(address + i))
+                aux = statistics.mode(arr)
+                self.memory.setMemoryValue(addressTemp, aux)
+            elif instruction == '27':
+                arr = []
+                address = self.quads[iP - 1][1]
+                addressTemp = self.quads[iP - 1][3]
+                size = self.quads[iP - 1][2]
+
+                for i in range(size):
+                    arr.append(self.memory.getMemoryValue(address + i))
+                aux = statistics(arr)
+                self.memory.setMemoryValue(addressTemp, aux)
             else:
                 pass
 
@@ -267,7 +333,6 @@ class ReadObjFile(object):
             self.table.getFunction(data['programName']))
         self.memory.addLocalMemory(self.table.getFunction('main'))
         self.memory.setCurrentMemory()
-        self.memory.printMemory()
 
     def deleteObjFile(self) -> None:
         '''

@@ -44,6 +44,10 @@ class Quadruples(object):
             'VER': '21',
             '&': '22',
             '|': '23',
+            'mean': '24',
+            'median': '25',
+            'mode': '26',
+            'variance': '27',
         }
 
     def push(self, o: str, type: str) -> None:
@@ -295,6 +299,21 @@ class Quadruples(object):
         expOperandType = expTuple[1]
 
         self.appendQuad('+', expOperand, '*1', expOperand)
+
+    def createQuadSpecialFunc(self, func: str, address: int, type: str, size: int):
+        '''
+        Function to add one to variable in for loop.
+        '''
+
+        if type != 'float' and type != 'int':
+            sys.exit("Error: array must be of type int or float")
+
+        temp = self.variableAddress.getTypeStartingAddress(
+            'local', 'temporal')
+        self.stackOperands.append((temp, 'float'))
+        self.table.addSize('temporal')
+
+        self.appendQuad(func, address, size, temp)
 
     def updateQuadGoTo(self, extra: int = 0) -> None:
         '''

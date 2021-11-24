@@ -43,8 +43,14 @@ main() {
     // Array declaration
     var <type> <name>[<size>];
 
+    // Print variables, strings and expressions
+    print(a, "This will also print", 5+5);
+
     // Read from console into variable a
     read(a);
+
+    // Read from console into variable a and then read from console into b
+    read(a, b);
 
     // If statement
     if (5 > 3) {
@@ -74,6 +80,13 @@ main() {
     for (a = 1 to 6) {
         print("This will print 5 times");
     }
+
+    // Statistic functions
+    // Several statistic functions are included, they take the name of an  // array as a parameter
+    // mean(arr)
+    // median(arr)
+    // mode(arr)
+    // variance(arr)
 }
 ```
 

@@ -20,6 +20,10 @@ reserved = {
     'function': 'FUNCTION_ID',
     'return': 'RETURN_ID',
     'main': 'MAIN_ID',
+    'mean': 'MEAN',
+    'median': 'MEDIAN',
+    'mode': 'MODE',
+    'variance': 'VARIANCE',
 }
 
 tokens = [
