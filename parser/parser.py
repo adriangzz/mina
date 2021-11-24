@@ -559,20 +559,6 @@ def p_expression(p):
     quad.checkOperator(['>', '<', '>=', '<=', '==', '!=', '&', '|'], False)
 
 
-def p_string(p):
-    '''
-    string : STRING
-    '''
-    string = p[1][1:-1]
-    if table.isConstant(string):
-        address = table.getConstant(string)
-        quad.push(address, 'string')
-    else:
-        address = variableAddress.getTypeStartingAddress('constant', 'string')
-        table.addConstant(string, address, 'string')
-        quad.push(address, 'string')
-
-
 def p_comparison(p):
     '''
     comparison : GREATER_THAN
