@@ -9,7 +9,7 @@ To use the compiler, Python 3 must be installed in the system
 
 ## Usage
 
-Run:
+In de root directory run:
 
 ```bash
 python3 main.py <filename>
