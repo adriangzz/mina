@@ -20,7 +20,7 @@ class Quadruples(object):
         self.table = table
         self.currFunctionParameterCounter = 0
         self.currFunctionCall = ''
-        self.operandCodes = {
+        self.operatorCodes = {
             '+': '1',
             '-': '2',
             '*': '3',
@@ -366,7 +366,7 @@ class Quadruples(object):
         '''
         Get the code given the operand.
         '''
-        return self.operandCodes[operand]
+        return self.operatorCodes[operand]
 
     def getQuads(self) -> list:
         '''
