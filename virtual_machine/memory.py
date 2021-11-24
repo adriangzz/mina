@@ -3,7 +3,8 @@ from parser.variable_address import VariablesAddress
 
 class Memory(object):
     '''
-    Class to keep virtual memory
+    Class to keep virtual memory, uses a dictionary of lists to keep track of memory for each type.
+    It generates a list size given the memory needed.
     '''
 
     def __init__(self) -> None:
