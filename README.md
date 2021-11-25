@@ -19,7 +19,7 @@ python3 main.py <filename>
 
 Program Structure
 
-```
+```cpp
 program <name>;
 
 // This is a comment!
@@ -90,6 +90,51 @@ main() {
     // variance(arr)
     // plot(arr1, arr2)
 }
+```
+
+Declare variables
+
+```cpp
+var int a, arr[5];
+var float f;
+```
+
+Declare functions
+
+```cpp
+function int add(int a, int b) {
+    return a + b;
+}
+
+function void printNum(int a) {
+    print(a);
+}
+```
+
+Read to variable
+
+```cpp
+var int a;
+read(a);
+```
+
+Loops
+
+```cpp
+for (i = 0 to 5) {
+    print(i);
+}
+
+while (i < 5) {
+    print(i);
+    i = i + 1;
+}
+
+do {
+    print(i);
+    i = i + 1;
+} while (i < 5)
+
 ```
 
 ## License
